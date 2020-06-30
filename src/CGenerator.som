@@ -16,7 +16,7 @@ CGenerator = (
   toC = ( | s |
     s := '\n/* CGenerator Output */\n\n'.
     (ASTMethod methods keys ) do: [ :m |
-      s := s + '#define METHOD_' + m + ' ' + (ASTMethod methods get: m) + ';\n'
+      s := s + '#define METHOD_' + m + ' ((short) ' + (ASTMethod methods get: m) + ');\n'
     ].
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.

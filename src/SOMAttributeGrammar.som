@@ -40,6 +40,10 @@ SOMAttributeGrammar = SOMParser (
     ]
   )
 
+  variable = (
+    ^ super variable action: [ :v | ASTVariable new: v ]
+  )
+
   methodBlock = (
     ^ super methodBlock action: [ :mb | mb at: 2 ]
   )
