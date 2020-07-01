@@ -15,9 +15,10 @@ ASTMethod = (
   )
 
   toC = ( | s |
+    holder ifNil: [ ^ 'no holder' ].
     s := '\n'.
     isPrimitive ifTrue: [ s := s + '/* TODO: native\n' ].
-    s := s + '\nSObject ' + (holder name) + '__' + pattern + '(' + (holder name )+ ' *self_) {\n'.
+    s := s + '\nSObject ' + (holder name) + '__' + pattern + '(' + (holder name)+ ' *self_) {\n'.
     s := s + '  ' + (holder name) + ' self = (' + (holder name) + ') self_;\n'.
     localDefs ifNotNil: [
       localDefs do: [ :def |
@@ -25,6 +26,7 @@ ASTMethod = (
       ].
       s := s + '\n'
     ].
+    block class println.
     isPrimitive ifFalse: [ s := s + '  ' + block ].
     s := s + '\n}\n'.
     isPrimitive ifTrue: [ s := s + '/*\n' ].

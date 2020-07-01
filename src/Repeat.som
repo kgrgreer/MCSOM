@@ -20,6 +20,10 @@ Repeat = Parser (
     ]
   )
 
+  asString = ( | s |
+    ^ 'repeat(' + parser asString + ')'
+  )
+
   ----
   parser: parser min: min = ( | r |
     r := Repeat new.

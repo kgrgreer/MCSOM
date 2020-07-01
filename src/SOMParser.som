@@ -2,7 +2,7 @@ SOMParser = Grammar (
   "translated from: https://github.com/SOM-st/SOM/blob/master/specification/SOM.g4"
 
   classdef = ( ^
-    self Identifier , self Equal , self superclass ,
+    (self sym: #Identifier) , self Equal , self superclass ,
     self NewTerm ,
       self instanceFields ,
       self method star ,
@@ -27,11 +27,11 @@ SOMParser = Grammar (
   )
 
   method = ( ^
-    self pattern , self Equal , ( self STPrimitive || self methodBlock )
+    (self sym: #pattern) , self Equal , ( self STPrimitive || (self sym: #methodBlock) )
   )
 
   pattern = ( ^
-    self unaryPattern || self keywordPattern || self binaryPattern
+    (self sym: #keywordPattern) || (self sym: #binaryPattern) || (self sym: #unaryPattern)
   )
 
   unaryPattern = ( ^ self unarySelector )
@@ -43,10 +43,10 @@ SOMParser = Grammar (
   )
 
   methodBlock = ( ^
-    self NewTerm , self blockContents optional, self EndTerm
+    self NewTerm , (self sym: #blockContents) optional, self EndTerm
   )
 
-  unarySelector = ( ^ self identifier )
+  unarySelector = ( ^ self sym: #identifier )
 
   binarySelector = ( ^
     self Or   || self Comma || self Minus || self Equal || self Not  ||
@@ -54,7 +54,7 @@ SOMParser = Grammar (
     self More || self Less  || self At    || self Per   || self OperatorSequence
   )
 
-  identifier = ( ^ self STPrimitive || self Identifier )
+  identifier = ( ^ self STPrimitive || (self sym: #Identifier) )
 
   keyword = ( ^ self Keyword )
 
@@ -68,8 +68,8 @@ SOMParser = Grammar (
   localDefs = ( ^ self variable star )
 
   blockBody = ( ^
-    self Exit , self result ||
-    (self expression , ( self Period , ((self sym: #blockBody) optional)) optional)
+    (self sym: #Exit) , (self sym: #result) ||
+    ((self sym: #expression) , ( self Period , ((self sym: #blockBody) optional)) optional)
   )
 
   result = ( ^
@@ -90,7 +90,7 @@ SOMParser = Grammar (
     self variable            ||
     (self sym: #nestedTerm)  ||
     (self sym: #nestedBlock) ||
-    self literal
+    (self sym: #literal)
   )
 
   variable = ( ^ self identifier )
@@ -105,9 +105,9 @@ SOMParser = Grammar (
     self keywordMessage
   )
 
-  unaryMessage = ( ^ self unarySelector )
+  unaryMessage = ( ^ self sym: #unarySelector )
 
-  binaryMessage = ( ^ self binarySelector , self binaryOperand )
+  binaryMessage = ( ^ (self sym: #binarySelector) , self binaryOperand )
 
   binaryOperand = ( ^ self primary , self unaryMessage star)
 
@@ -121,9 +121,9 @@ SOMParser = Grammar (
 
   literal = ( ^
     (self sym: #literalArray) ||
-    self literalSymbol        ||
-    self literalString        ||
-    self literalNumber
+    (self sym: #literalSymbol) ||
+    (self sym: #literalString) ||
+    (self sym: #literalNumber)
   )
 
   literalArray = ( ^
@@ -143,7 +143,7 @@ SOMParser = Grammar (
 
   literalString = ( ^ (self string) )
 
-  selector = ( ^ self binarySelector || self keywordSelector || self unarySelector )
+  selector = ( ^ (self sym: #binarySelector) || (self sym: #keywordSelector) || (self sym: #unarySelector) )
 
   keywordSelector = ( ^ self Keyword || self KeywordSequence )
 

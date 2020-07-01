@@ -119,12 +119,19 @@ SOMInterpreterTest = (
     self test: #classdef with: 'Trig = (|x y z|)'.
     self test: #classdef with: 'Math = (pi=(^3))'.
     ].
+"
 
-    self test: #classdef with: 'Person = (|fName lName age| hash = primitive age = (|x y z| ^age))'.
-    self test: #classdef with: 'Person2 = (|fName lName age| hash = primitive age = (|x y z| ^age))'.
-    self test: #classdef with: 'Person3 = (|fName lName age| hash = primitive age = (^age) age: v = ( age := v ) name = ( ^ fName + \' \' + lName ))'.
-
-    CGenerator instance toC println.
+    self test: #classdef with: 'Person = (|fName lName age| hash = primitive  age = (|x y z| ^age))'.
+    self test: #classdef with: 'Person2 = (|fName lName age| hash = primitive age: a = ( age := age) age = (|x y z| ^age))'.
+    self test: #classdef with: 'Square = (|x y w| x: v = ( ^4 ) x = ( ^x ))'.
+"
+self test: #pattern with: 'age: a'.
+self test: #method with: 'age: a = ( ^4 )'.
+self test: #classdef with: 'Person3 = ( | age | age: v = ( age := v ))'.
+"
+    self test: #classdef with: 'Person4 = (|fName lName age| hash = primitive age = (^age) age: v = ( age := v ) name = ( ^ fName + \' \' + lName ))'.
+"
+"    CGenerator instance toC println."
 
     'Done.' println.
   )

@@ -9,6 +9,10 @@ Optional = Parser (
     ^ ps2
   )
 
+  asString = ( | s |
+    ^ 'optional(' + parser asString + ')'
+  )
+
   ----
   parser: parser = ( | r |
     r := Optional new.

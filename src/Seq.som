@@ -18,6 +18,10 @@ Seq = Parser (
     ^ ps2 value: (Array with: (ps value) with: (ps2 value))
   )
 
+  asString = ( | s |
+    ^ a asString + ' , ' + b asString
+  )
+
   ----
   new: a then: b = ( | p |
     p := Seq new.

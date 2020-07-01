@@ -8,13 +8,13 @@ ASTLiteral = (
   )
 
   toC = (
-    'LITERAL(' + value + ')'
+    ^ 'LITERAL(' + value + ')'
   )
 
 ----
   new: l = ( | m |
     m := ASTLiteral new.
-    m value: e.
+    m value: l.
     ^m
   )
 )

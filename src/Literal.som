@@ -14,6 +14,10 @@ Literal = Parser (
     ^ ps value: value
   )
 
+  asString = ( | s |
+    ^ '\'' + str + '\''
+  )
+
   ----
   new: str = ( | l |
     l := Literal new.

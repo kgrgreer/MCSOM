@@ -11,6 +11,8 @@ NotChars = Parser (
     ^ ps tail: h.
   )
 
+  asString = ( ^ '-' + str )
+
   ----
   new: str = ( | r |
     r := NotChars new.

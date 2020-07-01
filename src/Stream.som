@@ -37,6 +37,7 @@ Stream = (
 
   setValue: value = (
     | newPS |
+"    self println."
     newPS := Stream new.
     newPS str: str.
     newPS pos: pos.
@@ -45,6 +46,7 @@ Stream = (
   )
 
   asString = (
+    value class println.
     ^ 'Stream(' + pos + ',' + str + ',' + (self head) + ', \'' + (value asString) + '\')'
   )
 

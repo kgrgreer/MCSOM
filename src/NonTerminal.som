@@ -7,6 +7,8 @@ NonTerminal = Parser (
 
   parse: ps = ( ^ parser parse: (skip parse: ps) )
 
+  asString = ( ^ parser asString )
+
   ----
 
   grammar: g parser: p = ( | n |

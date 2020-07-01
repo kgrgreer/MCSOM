@@ -11,6 +11,8 @@ Sym = Parser (
     ^ parser parse: ps
   )
 
+  asString = ( ^ '<' + symbol + '>' )
+
   ----
   grammar: g symbol: s = ( | p |
     p := Sym new.

@@ -12,6 +12,10 @@ Alt = Parser (
     ^ nil
   )
 
+  asString = ( | s |
+    ^ a asString + ' || ' + b asString
+  )
+
   ----
   new: a or: b = ( | p |
     p := Alt new.

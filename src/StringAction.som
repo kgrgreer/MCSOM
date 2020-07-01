@@ -15,6 +15,10 @@ StringAction = Parser (
     ^ ps
   )
 
+  asString = ( | s |
+    ^ 'Action(' + parser asString + ')'
+  )
+
   ----
   parser: p = ( | r |
     r := StringAction new.

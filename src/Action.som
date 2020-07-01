@@ -6,8 +6,14 @@ Action = Parser (
 
   parse: ps = (
     ps := parser parse: ps.
+    '-------------- action: ' println.
+    parser println.
     ps notNil ifTrue: [ ps := ps value: (block value: ps value) ].
     ^ ps
+  )
+
+  asString = ( | s |
+    ^ parser asString
   )
 
   ----
