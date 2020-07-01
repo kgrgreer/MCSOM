@@ -1,7 +1,7 @@
-SOMAttributeGrammar = SOMParser (
+AttributeGrammar = SOMParser (
 
   print: v = (
-    v class = Vector ifTrue: [ v := v asArray ].
+    v class = Vector ifTrue: [ v :=   v asArray ].
     v class = Array ifTrue: [
       '[' print.
         v do: [ :i | self print: i. ' ' print ].
@@ -41,34 +41,46 @@ SOMAttributeGrammar = SOMParser (
   )
 
   variable = (
-    ^ super variable action: [ :v | '---variable' println. ASTVariable new: v ]
+    ^ super variable action: [ :v | ASTVariable new: v ]
   )
 
-  methodBlock = (
-    ^ super methodBlock action: [ :mb | '---methodblock' println. mb at: 2 ]
+  keywordPattern = (
+    ^ super keywordPattern action: [ :p | p ]
+  ),
+
+  xxxmethodBlock = (
+    ^ super methodBlock action: [ :b | self print: b. b at: 2 ]
+  )
+
+  nestedTerm = (
+    ^ super nestedTerm action: [ :nt | nt at: 2 ]
   )
 
   blockContents = (
     ^ super blockContents action: [ :bc | | localDefs |
-'---blockContents' println.
-      (bc at: 1) ifNil: [ localDefs := nil ] ifNotNil: [ localDefs := (bc at: 1) at: 2 ].
+    '---------------------------------------------------------------------- blockContents ' println.
+    self print: bc.
+      (bc at: 1)
+        ifNil:    [ localDefs := nil ]
+        ifNotNil: [ localDefs := (bc at: 1) at: 2 ].
       Array with: localDefs with: (bc at: 2)
     ]
   )
 
   blockBody = (
     ^ super blockBody action: [ :bb | |exp|
-      bb ifNil: [ nil ]
-      ifNotNil: [
-        '^' = (bb at: 1) ifTrue: [
-          (bb at: 2) println.
-          ASTExit expr: (bb at: 2)
-        ] ifFalse: [
-         (bb at: 1) println.
-          exp := ASTExpression expr: (bb at: 1).
-          exp
+      bb
+        ifNil: [ nil ]
+        ifNotNil: [
+          '^' = (bb at: 1)
+            ifTrue: [
+              ASTExit expr: (bb at: 2)
+            ]
+            ifFalse: [
+              exp := ASTExpression expr: (bb at: 1).
+              exp
+            ]
         ]
-      ]
     ]
   )
 
@@ -79,6 +91,7 @@ SOMAttributeGrammar = SOMParser (
       pattern := m at: 1.
       block   := m at: 3.
 
+      ('----------------------------------------- method: ' + pattern + ', ' + block) println.
       ast := ASTMethod pattern: pattern block: block.
 
       ast
@@ -91,15 +104,23 @@ SOMAttributeGrammar = SOMParser (
     ]
   )
 
-"messages = ( ^
-  (
-    self unaryMessage plus ,
-    self binaryMessage star ,
-    self keywordMessage optional
-  ) ||
-  (self binaryMessage plus , self keywordMessage optional ) ||
-  self keywordMessage
-)"
+  binaryMessage = (
+    ^ super binaryMessage action: [ :u |
+      ASTMessage selector: (u at: 1) arg: (u at: 2)
+    ]
+  )
+
+  keywordMessage = (
+    ^ super keywordMessage action: [ :u |
+      ASTMessage selector: u
+    ]
+  )
+
+"
+binaryMessage = ( ^ (self sym: #binarySelector) , self binaryOperand )
+
+keywordMessage = ( ^ ( self keyword , self formula ) plus )
+"
 
   evaluation = (
     ^ super evaluation action: [ :e | | expr ms |
@@ -128,7 +149,6 @@ SOMAttributeGrammar = SOMParser (
 
   instanceFields = (
     ^ super instanceFields action: [ :cd |
-'---instancefields' println.
       cd ifNil: [ nil ] ifNotNil: [
         cd at: 2
       ]
@@ -136,11 +156,11 @@ SOMAttributeGrammar = SOMParser (
   )
 
   literal = (
-    ^ super literal action: [ :l | (' ---- literal: ' + l) println. ASTLiteral new: l ]
+    ^ super literal action: [ :l | ASTLiteral new: l ]
   )
 
   result = (
-    ^ super result action: [ :r | '---results ' println. r at: 1 ]
+    ^ super result action: [ :r | r at: 1 ]
   )
 
   Identifier = (
@@ -149,7 +169,6 @@ SOMAttributeGrammar = SOMParser (
 
   Number = (
     ^ super Number action: [ :a | | n |
-    self print: a. ' number' println.
       n := ((self arrayToStr: (a at: 2)) asInteger).
       (a at: 3) ifNotNil: [ | f |
         f := 0.0 + ((self arrayToStr: ((a at: 3) at: 2)) asInteger).
@@ -157,7 +176,6 @@ SOMAttributeGrammar = SOMParser (
         n := f + n
       ].
       (a at: 1) = '-' ifTrue: [ n := 0 - n ].
-      n println.
       n
     ]
   )

@@ -1,4 +1,4 @@
-SOMInterpreterTest = (
+Test = (
   | interp |
 
   test: m with: str = ( | res |
@@ -9,7 +9,7 @@ SOMInterpreterTest = (
   )
 
   run = (
-    interp := SOMAttributeGrammar  new.
+    interp := AttributeGrammar  new.
 
 "
     self test: # with: ''.
@@ -64,17 +64,18 @@ SOMInterpreterTest = (
     self test: #result with: '3.14'.
     self test: #blockBody with: '^3.14'.
     self test: #blockContents with: '^3.14'.
+    ].
     self test: #method with: 'pi=(^3)'.
     self test: #method with: 'pi=primitive'.
     self test: #method with: 'f = (^3)'.
-    self test: #methodBlock with: '(^3.14)'. "doesn't work"
+    self test: #methodBlock with: '(^3.14)'.
     self test: #methodBlock with: '(3.14)'.
     self test: #result with: '3.14'.
     self test: #methodBlock with: '()'. "doesn't work"
     self test: #method with: 'f = (^3.14)'.
     self test: #method with: 'f = (^5)'.
     self test: #method with: 'f = (^\"foo\")'.
-
+[
     self test: #classdef with: 'User = ( | firstName lastName | )'.
 
     self test: #literalSymbol with: '#abc'.
@@ -118,20 +119,21 @@ SOMInterpreterTest = (
     self test: #classdef with: 'Trig = Math (|x y z|)'.
     self test: #classdef with: 'Trig = (|x y z|)'.
     self test: #classdef with: 'Math = (pi=(^3))'.
-    ].
-"
 
     self test: #classdef with: 'Person = (|fName lName age| hash = primitive  age = (|x y z| ^age))'.
     self test: #classdef with: 'Person2 = (|fName lName age| hash = primitive age: a = ( age := age) age = (|x y z| ^age))'.
     self test: #classdef with: 'Square = (|x y w| x: v = ( ^4 ) x = ( ^x ))'.
+    self test: #pattern with: 'age: a'.
+    self test: #method with: 'age: a = ( ^4 )'.
+    self test: #classdef with: 'Person3 = ( | age | age: v = ( age := v ))'.
+    ].
+
+self test: #method with: 'foo = ( |a b c | ^4 )'.
+
 "
-self test: #pattern with: 'age: a'.
-self test: #method with: 'age: a = ( ^4 )'.
-self test: #classdef with: 'Person3 = ( | age | age: v = ( age := v ))'.
-"
-    self test: #classdef with: 'Person4 = (|fName lName age| hash = primitive age = (^age) age: v = ( age := v ) name = ( ^ fName + \' \' + lName ))'.
-"
-"    CGenerator instance toC println."
+    self test: #classdef with: 'Person4 = (|fName lName age| , a = ( ^42 ) hash = primitive age = (^age) age: v = ( age := v ) name = ( ^ fName + \' \' + lName ))'.
+    CGenerator instance toC println.
+    "
 
     'Done.' println.
   )

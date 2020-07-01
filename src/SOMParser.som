@@ -27,7 +27,7 @@ SOMParser = Grammar (
   )
 
   method = ( ^
-    (self sym: #pattern) , self Equal , ( self STPrimitive || (self sym: #methodBlock) )
+    (self sym: #pattern) , self Equal , ( self STPrimitive || self methodBlock )
   )
 
   pattern = ( ^
@@ -43,7 +43,7 @@ SOMParser = Grammar (
   )
 
   methodBlock = ( ^
-    self NewTerm , (self sym: #blockContents) optional, self EndTerm
+    (self NewTerm , (self blockContents optional), self EndTerm) action: [ :b | '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ' print. ('1: ' + (b at: 1) + ' , 2: ' + (b at: 2) + ' , 3: ' + (b at: 3))  print. ' ' print. b println. b at: 2 ]
   )
 
   unarySelector = ( ^ self sym: #identifier )

@@ -4,11 +4,11 @@ ASTLiteral = (
   value: v = ( value := v )
 
   asString = (
-    ^ self toC
+    ^ 'LITERAL(' + value + ')'
   )
 
   toC = (
-    ^ 'LITERAL(' + value + ')'
+    ^ value
   )
 
 ----

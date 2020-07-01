@@ -6,7 +6,7 @@ ASTMethod = (
   index:       v = ( index       := v )
   index          = ( ^index )
   pattern:     v = ( pattern     := v )
-  localDefs:   v = ( localDefs   := v )
+  localDefs:   v = ( localDefs   := v. v class == Array ifFalse: [ ('==================== localDefs' + v + (v class)) println.] )
   block:       v = ( block       := v )
   isPrimitive: v = ( isPrimitive := v )
 
@@ -15,12 +15,11 @@ ASTMethod = (
   )
 
   toC = ( | s |
-    holder ifNil: [ ^ 'no holder' ].
+    holder ifNil: [ holder := Object ].
     s := '\n'.
     isPrimitive ifTrue: [ s := s + '/* TODO: native\n' ].
     s := s + '\nSObject ' + (holder name) + '__' + pattern + '(' + (holder name)+ ' *self_) {\n'.
-    s := s + '  ' + (holder name) + ' self = (' + (holder name) + ') self_;\n'.
-    localDefs ifNotNil: [
+    s := s + '  ' + (holder name) + ' self = (' + (holder name) + ') self_;\n'.    localDefs ifNotNil: [
       localDefs do: [ :def |
         s := s + '  SObject *' + def + ';\n'
       ].
@@ -45,11 +44,19 @@ ASTMethod = (
     m := ASTMethod new.
     m pattern: p.
     b = 'primitive' ifTrue: [
-      m isPrimitive: true.
+      m isPrimitive: true
     ] ifFalse: [
       m isPrimitive: false.
+      '******************************* METHOD ' print.
+      "
+      (b class) println.
+      (b at: 1) println.
+      (b at: 2) println.
+      (b at: 3) println.
+      "
+      b println.
       m localDefs: (b at: 1).
-      m block: (b at: 2).
+      m block: (b at: 2)
     ].
     index := self methods get: p.
     index ifNil: [

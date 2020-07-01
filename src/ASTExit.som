@@ -8,7 +8,7 @@ ASTExit = (
   )
 
   toC = (
-    ^ '\n  return ' + expr + ';'
+    ^ '\n  return ' + expr toC + ';'
   )
 
 ----

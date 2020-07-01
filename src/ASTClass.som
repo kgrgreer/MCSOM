@@ -7,7 +7,8 @@ ASTClass = (
   fields:  v = ( fields  := v )
   methods: v = (
     methods := v.
-    v do: [ :m | m holder: self ]
+
+    v do: [ :m | m holder: self ].
   )
 
   asString = (
@@ -17,6 +18,7 @@ ASTClass = (
   toC = ( | s |
     s := '\n\ntypedef struct ' + name + '_ {\n'.
     s := s + '  SClass *class;\n'.
+
     fields do: [ :f |
       s := s + '  SObject *' + f + ';\n'.
     ].
