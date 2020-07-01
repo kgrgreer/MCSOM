@@ -23,11 +23,9 @@ Test = (
 
     self test: #AlphaNum with: '9'.
     self test: #AlphaNum with: 'a'.
-].
     self test: #Identifier with: 'a'.
     self test: #Identifier with: 'abc'.
     self test: #Identifier with: 'abc123'.
-[
     self test: #Number with: '1'.
     self test: #Number with: '123'.
     self test: #Number with: '-123'.
@@ -64,7 +62,6 @@ Test = (
     self test: #result with: '3.14'.
     self test: #blockBody with: '^3.14'.
     self test: #blockContents with: '^3.14'.
-    ].
     self test: #method with: 'pi=(^3)'.
     self test: #method with: 'pi=primitive'.
     self test: #method with: 'f = (^3)'.
@@ -75,7 +72,6 @@ Test = (
     self test: #method with: 'f = (^3.14)'.
     self test: #method with: 'f = (^5)'.
     self test: #method with: 'f = (^\"foo\")'.
-[
     self test: #classdef with: 'User = ( | firstName lastName | )'.
 
     self test: #literalSymbol with: '#abc'.
@@ -126,14 +122,12 @@ Test = (
     self test: #pattern with: 'age: a'.
     self test: #method with: 'age: a = ( ^4 )'.
     self test: #classdef with: 'Person3 = ( | age | age: v = ( age := v ))'.
+    self test: #method with: 'foo = ( |a b c | ^4 )'.
     ].
 
-self test: #method with: 'foo = ( |a b c | ^4 )'.
 
-"
-    self test: #classdef with: 'Person4 = (|fName lName age| , a = ( ^42 ) hash = primitive age = (^age) age: v = ( age := v ) name = ( ^ fName + \' \' + lName ))'.
+    self test: #classdef with: 'Person4 = (|fName lName age| , a = ( | x y z | ^42 ) hash = primitive age = (^age) age: v = ( age := v ) name = ( ^ fName + \' \' + lName ))'.
     CGenerator instance toC println.
-    "
 
     'Done.' println.
   )

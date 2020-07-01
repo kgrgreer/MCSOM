@@ -29,7 +29,7 @@ ASTMessage = (
   selector: s arg: a = ( | m |
     m := ASTMessage new.
     m selector: s.
-    m args: Array with: a.
+    m args: (Array with: a).
     m obj: 'UNKNOWN'.
     ^m
   )

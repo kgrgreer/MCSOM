@@ -48,10 +48,6 @@ AttributeGrammar = SOMParser (
     ^ super keywordPattern action: [ :p | p ]
   ),
 
-  xxxmethodBlock = (
-    ^ super methodBlock action: [ :b | self print: b. b at: 2 ]
-  )
-
   nestedTerm = (
     ^ super nestedTerm action: [ :nt | nt at: 2 ]
   )

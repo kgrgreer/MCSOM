@@ -44,16 +44,10 @@ ASTMethod = (
     m := ASTMethod new.
     m pattern: p.
     b = 'primitive' ifTrue: [
-      m isPrimitive: true
+      m isPrimitive: true.
+      m localDefs: #() "needed?"
     ] ifFalse: [
       m isPrimitive: false.
-      '******************************* METHOD ' print.
-      "
-      (b class) println.
-      (b at: 1) println.
-      (b at: 2) println.
-      (b at: 3) println.
-      "
       b println.
       m localDefs: (b at: 1).
       m block: (b at: 2)
