@@ -34,16 +34,27 @@ SOMParser = Grammar (
     (self sym: #keywordPattern) || (self sym: #binaryPattern) || (self sym: #unaryPattern)
   )
 
-  unaryPattern = ( ^ self unarySelector )
+  unaryPattern = (
+    ^ self unarySelector
+    action: [ :u | ASTPattern signature: u ]
+  )
 
-  binaryPattern = ( ^ self binarySelector , self argument )
+  binaryPattern = (
+    ^ self binarySelector , self argument
+    action: [ :u | ASTPattern signature: ((u at: 1) + '_C') args: (Array with: (u at: 2)) ]
+  )
 
   keywordPattern = ( ^
     ( self keyword , self argument ) plus
+    action: [ :a |
+      ASTPattern
+        signature: ((a asArray collect: [ :e | (e at: 1) at: 1 ]) inject: '' into: [ :s :e | s + e + '_' ])
+        args:      (a asArray collect: [ :e | e at: 2 ])
+    ]
   )
 
   methodBlock = ( ^
-    (self NewTerm , (self blockContents optional), self EndTerm) action: [ :b | '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ' print. ('1: ' + (b at: 1) + ' , 2: ' + (b at: 2) + ' , 3: ' + (b at: 3))  print. ' ' print. b println. b at: 2 ]
+    (self NewTerm , (self blockContents optional), self EndTerm) action: [ :b | b at: 2 ]
   )
 
   unarySelector = ( ^ self sym: #identifier )
@@ -229,7 +240,6 @@ SOMParser = Grammar (
   STString = ( ^ self nt:
     ((Literal new: '\'') , self STStringChar star , '\'')
   )
-
 
   Comment = ( ^ (Literal new: '"') , ((NotChars new: '"') star) , '"' )
 

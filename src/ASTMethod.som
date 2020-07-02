@@ -6,13 +6,13 @@ ASTMethod = (
   index:       v = ( index       := v )
   index          = ( ^index )
   pattern:     v = ( pattern     := v )
-  localDefs:   v = ( localDefs   := v. v class == Array ifFalse: [ ('==================== localDefs' + v + (v class)) println.] )
+  localDefs:   v = ( localDefs   := v )
   block:       v = ( block       := v )
   isPrimitive: v = ( isPrimitive := v )
+  signature      = ( ^ pattern name )
+  args           = ( ^ pattern args )
 
-  asString = (
-    ^ self toC
-  )
+  asString = ( ^ self toC )
 
   toC = ( | s |
     holder ifNil: [ holder := Object ].
@@ -43,15 +43,9 @@ ASTMethod = (
   pattern: p block: b = ( | m index |
     m := ASTMethod new.
     m pattern: p.
-    b = 'primitive' ifTrue: [
-      m isPrimitive: true.
-      m localDefs: #() "needed?"
-    ] ifFalse: [
-      m isPrimitive: false.
-      b println.
-      m localDefs: (b at: 1).
-      m block: (b at: 2)
-    ].
+    b = 'primitive'
+      ifTrue:  [ m isPrimitive: true. m block: b ]
+      ifFalse: [ m isPrimitive: false ].
     index := self methods get: p.
     index ifNil: [
       index := methods__ size + 1.

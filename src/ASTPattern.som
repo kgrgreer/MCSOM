@@ -1,0 +1,21 @@
+ASTPattern = (
+  | signature args |
+
+  signature    = ( ^ signature )
+  signature: v = ( signature := v )
+  args         = ( ^ args )
+  args:      v = ( args := v )
+
+  asString = ( ^ signature )
+
+----
+
+  signature: n = ( ^ self signature: n args: #() )
+
+  signature: n args: a = ( | p |
+    p := ASTPattern new.
+    p signature: n.
+    p args: a.
+    ^p
+  )
+)
