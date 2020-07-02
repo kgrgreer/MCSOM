@@ -44,8 +44,12 @@ ASTMethod = (
     m := ASTMethod new.
     m pattern: p.
     b = 'primitive'
-      ifTrue:  [ m isPrimitive: true. m block: b ]
-      ifFalse: [ m isPrimitive: false ].
+      ifTrue:  [ m isPrimitive: true ]
+      ifFalse: [
+        m isPrimitive: false.
+        m block: (b at: 2).
+        m localDefs: (b at: 1)
+      ].
     index := self methods get: p.
     index ifNil: [
       index := methods__ size + 1.
