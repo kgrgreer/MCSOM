@@ -152,7 +152,12 @@ keywordMessage = ( ^ ( self keyword , self formula ) plus )
   )
 
   literal = (
-    ^ super literal action: [ :l | ASTLiteral new: l ]
+    ^ super literal action: [ :l | | ast |
+      ast := ASTLiteral new: l.
+      "TODO: add someplace not C specific in future, but ok for now."
+      "CGenerator instance addLiteral: ast."
+      ast
+    ]
   )
 
   result = (

@@ -56,7 +56,7 @@ ASTMethod = (
       methods__ at: p put: index.
     ].
     m index: index.
-    CGenerator instance addMethod: m.
+"    CGenerator instance addMethod: m."
     ^m
   )
 )

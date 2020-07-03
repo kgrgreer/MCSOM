@@ -1,7 +1,8 @@
 ASTLiteral = (
-  | value |
+  | value index |
 
   value: v = ( value := v )
+  index: v = ( index := v )
 
   asString = (
     ^ 'LITERAL(' + value + ')'
@@ -12,9 +13,22 @@ ASTLiteral = (
   )
 
 ----
-  new: l = ( | m |
-    m := ASTLiteral new.
-    m value: l.
-    ^m
+  | literals__ |
+
+  literals = (
+    literals__ ifNil: [ literals__ := Hashtable new ].
+    ^ literals__
+  )
+
+  new: l = ( | a index |
+    a := ASTLiteral new.
+    a value: l.
+    index := self literals get: l.
+    index ifNil: [
+      index := literals__ size + 1.
+      literals__ at: l put: index.
+    ].
+    a index: index.
+    ^a
   )
 )

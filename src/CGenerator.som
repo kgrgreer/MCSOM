@@ -13,11 +13,19 @@ CGenerator = (
 
   addMethod: m = ( methods append: m )
 
+  addLiteral: l = ( literals append: l )
+
   toC = ( | s |
-    s := '\n/* CGenerator Output */\n\n'.
-    (ASTMethod methods keys ) do: [ :m |
+    s := '\n/********************** CGenerator Output **********************/\n\n'.
+
+    (ASTLiteral literals keys) do: [ :l |
+      s := s + 'const SObject LITERAL_' + l + ' = ' + (ASTLiteral literals get: l) + ';\n'
+    ].
+
+    (ASTMethod methods keys) do: [ :m |
       s := s + '#define METHOD_' + m + ' ((short) ' + (ASTMethod methods get: m) + ');\n'
     ].
+
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.
     ^ s
