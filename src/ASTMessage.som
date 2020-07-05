@@ -10,7 +10,7 @@ ASTMessage = (
   )
 
   toC = ( | s |
-    s := 'MSG(' + obj + ', ' + selector.
+    s := 'MSG(' + (obj toC) + ', ' + selector.
     args do: [ :a |
       s := s + ', ' + a
     ].
@@ -22,7 +22,7 @@ ASTMessage = (
     m := ASTMessage new.
     m selector: s.
     m args: #().
-    m obj: 'UNKNOWN'.
+    m obj: (ASTLiteral new: 'UNKNOWN').
     ^m
   )
 
@@ -30,7 +30,7 @@ ASTMessage = (
     m := ASTMessage new.
     m selector: s.
     m args: (Array with: a).
-    m obj: 'UNKNOWN'.
+    m obj: (ASTLiteral new: 'UNKNOWN').
     ^m
   )
 )
