@@ -22,12 +22,24 @@ CGenerator = (
       s := s + 'const SObject LITERAL_' + l + ' = ' + (ASTLiteral literals get: l) + ';\n'
     ].
 
+    s := s + '\n'.
+
     (ASTMethod methods keys) do: [ :m |
       s := s + '#define METHOD_' + m + ' ((short) ' + (ASTMethod methods get: m) + ');\n'
     ].
 
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.
+
+    s := s + '// primitives.c\n'.
+    classes do: [ :c |
+      c methods do: [ :m |
+        m isPrimitive ifTrue: [
+          s := s + m toC
+        ]
+      ]
+    ].
+
     ^ s
   )
 

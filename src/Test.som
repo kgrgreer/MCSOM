@@ -126,8 +126,8 @@ Test = (
     ].
 
 
-"    self test: #classdef with: 'Person4 = (|fName lName age| , unary = ( | x y z | ^#unary ) hash = primitive keyword: v = ( ^#keyword ) , a = ( ^ #unary ))'."
-    self test: #classdef with: 'Person4 = (unary = ( ^4 ) keyword: a = ( |x y z|^ 8))'.
+"    self test: #classdef with: 'Person4 = (|fName lName age| , unary = ( | x y z | ^#unary ) hash = primitive sum = ( ^ 1 + 2 ) keyword: v = ( ^#keyword ) , a = ( ^ #unary ))'."
+    self test: #classdef with: 'Person4 = (unary = ( ^4 ) sum = ( ^ 1 + 2 ) hash2=primitive keyword: a = ( |x y z|^ 8))'.
     CGenerator instance toC println.
 
     'Done.' println.

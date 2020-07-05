@@ -5,6 +5,7 @@ ASTClass = (
   name:    v = ( name    := v )
   extends: v = ( extends := v )
   fields:  v = ( fields  := v )
+  methods    = ( ^methods )
   methods: v = (
     methods := v.
 
@@ -25,7 +26,9 @@ ASTClass = (
     s := s + '} ' + name + ';\n'.
 
     methods do: [ :m |
-      s := s + m toC.
+      m isPrimitive ifFalse: [
+        s := s + m toC.
+      ]
     ].
 
     s := s + '\nSMethod ' + name + '_lookup(short method) {\n  switch ( method ) {'.

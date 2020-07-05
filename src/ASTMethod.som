@@ -8,6 +8,7 @@ ASTMethod = (
   pattern:     v = ( pattern     := v )
   localDefs:   v = ( localDefs   := v )
   block:       v = ( block       := v )
+  isPrimitive    = ( ^isPrimitive )
   isPrimitive: v = ( isPrimitive := v )
   signature      = ( ^ pattern name )
   args           = ( ^ pattern args )
@@ -17,7 +18,6 @@ ASTMethod = (
   toC = ( | s |
     holder ifNil: [ holder := Object ].
     s := '\n'.
-    isPrimitive ifTrue: [ s := s + '/* TODO: native\n' ].
     s := s + '\nSObject ' + (holder name) + '__' + pattern + '(' + (holder name)+ ' *self_) {\n'.
     s := s + '  ' + (holder name) + ' self = (' + (holder name) + ') self_;\n'.    localDefs ifNotNil: [
       localDefs do: [ :def |
@@ -28,7 +28,6 @@ ASTMethod = (
     block class println.
     isPrimitive ifFalse: [ s := s + '  ' + block ].
     s := s + '\n}\n'.
-    isPrimitive ifTrue: [ s := s + '/*\n' ].
     ^s
   )
 
@@ -56,7 +55,7 @@ ASTMethod = (
       methods__ at: p put: index.
     ].
     m index: index.
-"    CGenerator instance addMethod: m."
+    "CGenerator instance addMethod: m."
     ^m
   )
 )

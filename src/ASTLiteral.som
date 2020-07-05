@@ -9,7 +9,7 @@ ASTLiteral = (
   )
 
   toC = (
-    ^ value
+    ^ 'LITERAL_' + value
   )
 
 ----
