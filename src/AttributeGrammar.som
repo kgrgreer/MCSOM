@@ -100,23 +100,12 @@ AttributeGrammar = SOMParser (
     ]
   )
 
-  binaryMessage = (
-    ^ super binaryMessage action: [ :u |
-      ASTMessage selector: (u at: 1) arg: (u at: 2)
-    ]
-  )
-
   keywordMessage = (
     ^ super keywordMessage action: [ :u |
       ASTMessage selector: u
     ]
   )
 
-"
-binaryMessage = ( ^ (self sym: #binarySelector) , self binaryOperand )
-
-keywordMessage = ( ^ ( self keyword , self formula ) plus )
-"
 
   evaluation = (
     ^ super evaluation action: [ :e | | expr ms |

@@ -118,9 +118,22 @@ SOMParser = Grammar (
 
   unaryMessage = ( ^ self sym: #unarySelector )
 
-  binaryMessage = ( ^ (self sym: #binarySelector) , self binaryOperand )
+  binaryMessage = (
+    ^ (self sym: #binarySelector) , self binaryOperand
+    action: [ :u |
+      ASTMessage selector: (u at: 1) arg: (u at: 2)
+    ]
+  )
 
-  binaryOperand = ( ^ self primary , self unaryMessage star)
+  binaryOperand = (
+    ^ self primary , self unaryMessage star
+    action: [ :o | | m a |
+      m := o at: 1.
+      a := o at: 2.
+      a do: [ :e | m := ASTMessage obj: m selector: e ].
+      m
+    ]
+  )
 
   keywordMessage = ( ^ ( self keyword , self formula ) plus )
 

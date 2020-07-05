@@ -1,9 +1,15 @@
 typedef struct SObject_ {
-
+  SClass *class;
 } SObject;
 
+
+typedef struct SInteger_ {
+  SClass *class;
+  long value;
+} SObject;
+
+
 typedef struct SClass_ {
-  SObject fName;
-  SObject lName;
-  SObject age;
+  function pointer *lookup;
+  SString name;
 } SClass;

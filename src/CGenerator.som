@@ -18,8 +18,9 @@ CGenerator = (
   toC = ( | s |
     s := '\n/********************** CGenerator Output **********************/\n\n'.
 
-    (ASTLiteral literals keys) do: [ :l |
-      s := s + 'const SObject LITERAL_' + l + ' = ' + (ASTLiteral literals get: l) + ';\n'
+    (ASTLiteral literals keys) do: [ :l | | value |
+      value := (ASTLiteral literals get: l).
+      s := s + 'const SObject LITERAL_' + l + ' = new' + value class + '(' + value + ');\n'
     ].
 
     s := s + '\n'.
