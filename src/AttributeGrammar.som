@@ -68,7 +68,7 @@ AttributeGrammar = SOMParser (
       bb
         ifNil: [ nil ]
         ifNotNil: [
-          '^' = (bb at: 1)
+          '_Exit' = (bb at: 1)
             ifTrue: [
               ASTExit expr: (bb at: 2)
             ]
