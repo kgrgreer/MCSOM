@@ -18,7 +18,7 @@ ASTMethod = (
   toC = ( | s |
     holder ifNil: [ holder := Object ].
     s := '\n'.
-    s := s + '\nSObject ' + (holder name) + '__' + pattern + '(' + (holder name)+ ' *self_) {\n'.
+    s := s + '\nSObject ' + (holder name) + '_' + pattern + '(' + (holder name)+ ' *self_) {\n'.
     s := s + '  ' + (holder name) + ' self = (' + (holder name) + ') self_;\n'.    localDefs ifNotNil: [
       localDefs do: [ :def |
         s := s + '  SObject *' + def + ';\n'

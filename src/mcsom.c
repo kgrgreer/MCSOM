@@ -4,3 +4,8 @@ SInteger newInteger(long value) {
   o.value = value;
   return o;
 }
+
+
+SObject MSG(SObject *obj, short method, SObject *arg1) {
+  (obj->class)(method)(arg1);
+}
