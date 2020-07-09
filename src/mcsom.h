@@ -2,12 +2,10 @@ typedef struct SObject_ {
   SClass *class;
 } SObject;
 
-
 typedef struct SInteger_ {
   SClass *class;
   long value;
-} SObject;
-
+} SInteger;
 
 typedef struct SClass_ {
   function pointer *lookup;
