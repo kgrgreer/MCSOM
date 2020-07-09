@@ -11,13 +11,13 @@
 #define CALL4(o, m, a1, a2, a3, a4) (((Method4) LOOKUP(o, m)))((SObject) (o), (SObject) (a1), (SObject) (a2), (SObject) (a3), (SObject) (a4))
 
 typedef short MethodId;
-typedef struct SObject_* SObject;
-typedef SObject (*Method)(SObject);
+typedef struct SObject_ *SObject;
+typedef SObject (*Method )(SObject);
 typedef SObject (*Method1)(SObject, SObject);
 typedef SObject (*Method2)(SObject, SObject, SObject);
 typedef SObject (*Method3)(SObject, SObject, SObject, SObject);
 typedef SObject (*Method4)(SObject, SObject, SObject, SObject, SObject);
-typedef Method   (*Class)(MethodId);
+typedef Method  (*Class)(MethodId);
 struct SObject_ { Class *class; };
 
 SObject no_such_method(SObject this) { printf("no such method\n"); return this; }
@@ -46,12 +46,10 @@ SObject f2(SObject this) {
 
 // Start SInteger Definition
 
-struct SInteger_ {
+typedef struct SInteger_ {
   Class *class;
   int   value;
-};
-
-typedef struct SInteger_* SInteger;
+} *SInteger;
 
 
 SInteger newSInteger(int i);
@@ -82,7 +80,7 @@ Method SIntegerClass(MethodId method) {
 }
 
 SInteger newSInteger(int i) {
-  SInteger obj = malloc(100);
+  SInteger obj = malloc(sizeof(struct SInteger_));
   obj->class = (Class *) SIntegerClass;
   obj->value = i;
   return obj;
