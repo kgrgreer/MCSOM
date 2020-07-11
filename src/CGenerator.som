@@ -26,13 +26,16 @@ CGenerator = (
     s := s + '\n'.
 
     (ASTMethod methods keys) do: [ :m |
-      s := s + '#define METHOD_' + m + ' ((short) ' + (ASTMethod methods get: m) + ');\n'
+      s := s + '#define METHOD_' + m + ' ' + (ASTMethod methods get: m) + '\n'
     ].
+
+    classes do: [ :c | s := s + c toH ].
 
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.
 
-    s := s + '// primitives.c\n'.
+    s := s + '-- primitives.c\n'.
+    s := s + '#include "mcsom.h"'.
     classes do: [ :c |
       c methods do: [ :m |
         m isPrimitive ifTrue: [

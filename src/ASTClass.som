@@ -31,12 +31,20 @@ ASTClass = (
       ]
     ].
 
-    s := s + '\nSMethod ' + name + '_lookup(short method) {\n  switch ( method ) {'.
+    s := s + '\nSMethod ' + name + '_lookup(MethodId method) {\n  switch ( method ) {'.
     methods do: [ :m |
-      s := s + '\n    case METHOD_' + (m pattern) + ': return &' + name + '__' + (m pattern) + ' ;'
+      s := s + '\n    case METHOD_' + (m pattern) + ': return ' + name + '__' + (m pattern) + ' ;'
     ].
-    s := s + '\n  }\n}'.
+    s := s + '\n  }\n'.
+    s := s + '  return no_such_method;\n'.
+    s := s + '}'.
 
+    ^s
+  )
+
+  toH = ( | s |
+    s := '\n\ntypedef struct ' + name + '_ *' + name + '\n'.
+    s := s + name + ' new' + name + '();\n'.
     ^s
   )
 
