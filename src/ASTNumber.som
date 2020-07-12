@@ -1,0 +1,26 @@
+ASTNumber = ( | value |
+
+  value: v = ( value := v )
+
+  asString = ( ^ value asString )
+
+  toC = ( ^ 'NUM_' + value )
+
+----
+  | numbers__ |
+
+  numbers = (
+    numbers__ ifNil: [ numbers__ := Hashtable new ].
+    ^ numbers__
+  )
+
+  new: l = ( | a |
+    a := self numbers get: a.
+    a ifNil: [
+      a := ASTNumber new.
+      a value: l.
+      numbers__ at: l put: a.
+    ].
+    ^a
+  )
+)

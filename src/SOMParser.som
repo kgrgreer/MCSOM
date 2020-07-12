@@ -144,10 +144,10 @@ SOMParser = Grammar (
   )
 
   literal = ( ^
-    (self sym: #literalArray) ||
-    (self sym: #literalSymbol) ||
-    (self sym: #literalString) ||
-    (self sym: #literalNumber)
+    ((self sym: #literalArray)  action: [ :l | ASTLiteral new: l ]) ||
+    ((self sym: #literalSymbol) action: [ :l | ASTLiteral new: l ]) ||
+    ((self sym: #literalString) action: [ :l | ASTLiteral new: l ]) ||
+    ((self sym: #literalNumber) action: [ :l | ASTNumber new: l ])
   )
 
   literalArray = ( ^

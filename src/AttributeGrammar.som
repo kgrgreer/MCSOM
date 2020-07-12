@@ -140,15 +140,14 @@ AttributeGrammar = SOMParser (
     ]
   )
 
+"
   literal = (
     ^ super literal action: [ :l | | ast |
       ast := ASTLiteral new: l.
-      "TODO: add someplace not C specific in future, but ok for now."
-      "CGenerator instance addLiteral: ast."
       ast
     ]
   )
-
+"
   result = (
     ^ super result action: [ :r | r at: 1 ]
   )

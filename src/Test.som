@@ -126,7 +126,8 @@ Test = (
     ].
 
 
-"    self test: #classdef with: 'Person4 = (|fName lName age| , unary = ( | x y z | ^#unary ) hash = primitive sum = ( ^ 1 + 2 ) keyword: v = ( ^#keyword ) , a = ( ^ #unary ))'."
+
+"   self test: #classdef with: 'Person4 = (|fName lName age| , unary = ( | x y z | ^#unary ) hash = primitive sum = ( ^ 1 + 2 ) keyword: v = ( ^#keyword ) , a = ( ^ #unary ))'."
 
     self test: #classdef with: 'Integer = ( + argument = primitive asString = primitive println = primitive )'.
     self test: #classdef with: 'Test = ( test = ( 1 + 2 + 3 println ) test2 = ( 1 println. 2 println. ) )'.
