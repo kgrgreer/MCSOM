@@ -6,6 +6,10 @@ ASTNumber = ( | value |
 
   toC = ( ^ 'NUM_' + value )
 
+  toCDef = (
+    ^ 'const SObject NUM_' + value + ' = literal(' + value + ');\n'
+  )
+
 ----
   | numbers__ |
 
