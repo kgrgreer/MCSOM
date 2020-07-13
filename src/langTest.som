@@ -1,0 +1,33 @@
+langTest = (
+  | interp |
+
+  test: m with: str = ( | res |
+    ('TESTING: ' + m + ' with ' + str) println.
+    res := ((interp perform: m) parse: (Stream newWithStr: (str + '  '))).
+    ('result: ' + res + ' value: \'' + (res value class) + '\'') println.
+    '' println.
+  )
+
+  run = (
+    interp := AttributeGrammar  new.
+
+self test: #program with: 'Integer =
+( + argument = primitive
+asString   = primitive
+println    = primitive
+asString   = primitive
+)
+String = (
+  + argument = primitive
+  asString   = primitive
+  println    = primitive
+  length     = primitive
+  asString   = ( ^ self )
+)
+
+'.
+    CGenerator instance toC println.
+
+    'Done.' println.
+  )
+)
