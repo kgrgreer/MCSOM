@@ -11,12 +11,13 @@ langTest = (
   run = (
     interp := AttributeGrammar  new.
 
-self test: #program with: 'Integer =
-( + argument = primitive
-asString   = primitive
-println    = primitive
-asString   = primitive
+self test: #program with: 'Integer = (
+  + argument = primitive
+  asString   = primitive
+  println    = primitive
+  asString   = primitive
 )
+
 String = (
   + argument = primitive
   asString   = primitive
@@ -25,6 +26,35 @@ String = (
   asString   = ( ^ self )
 )
 
+True = (
+    "Converting"
+    asString       = ( ^\'true\' )
+
+    "Conditional evaluation"
+    ifTrue:  block = ( ^block value )
+    ifFalse: block = ( ^nil )
+
+    "Logical operations"
+    not        = ( ^false )
+    or: block  = ( ^true )
+    and: block = ( ^block value )
+)
+
+False = Boolean (
+
+    "Converting"
+    asString       = ( ^\'false\' )
+
+    "Conditional evaluation"
+    ifTrue:  block = ( ^nil )
+    ifFalse: block = ( ^block value )
+
+    "Logical operations"
+    not        = ( ^true )
+    or: block  = ( ^block value )
+    and: block = ( ^false )
+
+)
 '.
     CGenerator instance toC println.
 

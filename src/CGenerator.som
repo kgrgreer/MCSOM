@@ -34,7 +34,11 @@ CGenerator = (
       s := s + '#define METHOD_' + m + ' ' + (ASTMethod methods get: m) + '\n'
     ].
 
-    classes do: [ :c | s := s + c toH ].
+    classes do: [ :c |
+      c == 'String' || [ c == 'Integer' ] ifFalse: [
+        s := s + c toH
+      ]
+    ].
 
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.
