@@ -1,6 +1,10 @@
 SOMParser = Grammar (
   "translated from: https://github.com/SOM-st/SOM/blob/master/specification/SOM.g4"
 
+  program = ( ^ (self sym: #Classdef) plus )
+
+  Classdef = ( ^ self nt: (self sym: #classdef) )
+
   classdef = ( ^
     (self sym: #Identifier) , self Equal , self superclass ,
     self NewTerm ,

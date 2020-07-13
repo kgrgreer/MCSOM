@@ -49,10 +49,10 @@ ASTMethod = (
         m block: (b at: 2).
         m localDefs: (b at: 1)
       ].
-    index := self methods get: p.
+    index := self methods get: (p signature).
     index ifNil: [
       index := methods__ size + 1.
-      methods__ at: p put: index.
+      methods__ at: (p signature) put: index.
     ].
     m index: index.
     "CGenerator instance addMethod: m."
