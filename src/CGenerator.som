@@ -25,7 +25,12 @@ CGenerator = (
 
     (ASTLiteral literals keys) do: [ :l | | value |
       value := (ASTLiteral literals get: l).
-      s := s + 'const SObject LITERAL_' + l + ' = literal(' + value + ');\n'
+      l class = String ifTrue: [
+        s := s + 'const SObject LITERAL_' + l + ' = literal("' + l + '");\n'
+      ]
+      ifFalse: [
+        s := s + 'const SObject LITERAL_' + l + ' = literal(' + l + ');\n'
+      ]
     ].
 
     s := s + '\n'.

@@ -40,7 +40,7 @@ True = (
     and: block = ( ^block value )
 )
 
-False = Boolean (
+False = (
 
     "Converting"
     asString       = ( ^\'false\' )
@@ -54,6 +54,34 @@ False = Boolean (
     or: block  = ( ^block value )
     and: block = ( ^false )
 
+)
+
+Nil = (
+
+    "Converting"
+    asString = ( ^\'nil\' )
+
+    "Comparing"
+    isNil    = ( ^true )
+    notNil   = ( ^false )
+
+    "Convenience"
+    ifNil: aBlock = (^aBlock value)
+    ifNotNil: aBlock = (^self)
+    ifNil: goBlock ifNotNil: noGoBlock = (^goBlock value)
+    "TODO: next line doesn\'t parse for some reason"
+    "do: block = ( )"
+)
+
+Test = (
+  main = (
+    1 println.
+    \'abc\' println.
+    true println.
+    false println.
+    nil println.
+    1 + 2 println.
+  )
 )
 '.
     CGenerator instance toC println.
