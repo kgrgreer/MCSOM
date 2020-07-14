@@ -133,9 +133,7 @@ AttributeGrammar = SOMParser (
 
   instanceFields = (
     ^ super instanceFields action: [ :cd |
-      cd ifNil: [ nil ] ifNotNil: [
-        cd at: 2
-      ]
+      cd ifNotNil: [ cd at: 2 ]
     ]
   )
 

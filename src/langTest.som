@@ -74,6 +74,7 @@ Nil = (
 )
 
 Test = (
+  | a b c def |
   main = (
     1 println.
     \'abc\' println.
