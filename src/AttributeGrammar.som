@@ -46,10 +46,6 @@ AttributeGrammar = SOMParser (
 
   keywordPattern = (
     ^ super keywordPattern action: [ :p | p ]
-  ),
-
-  nestedTerm = (
-    ^ super nestedTerm action: [ :nt | nt at: 2 ]
   )
 
   blockContents = (
@@ -74,6 +70,9 @@ AttributeGrammar = SOMParser (
             ]
             ifFalse: [
               exp := ASTExpression expr: (bb at: 1).
+              bb length = 2 ifTrue: [
+                exp tail: ((bb at: 2) at: 2)
+              ].
               exp
             ]
         ]

@@ -11,7 +11,7 @@ ASTExpression = (
   toC = ( | s |
     " TODO: '' not needed once expr fixed "
     s := '' + expr + ';'.
-    "tail ifNotNil: [ s := s + tail ]."
+    tail ifNotNil: [ s := s + '\n  ' + tail ].
     ^ s
   )
 

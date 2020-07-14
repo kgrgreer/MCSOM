@@ -144,7 +144,7 @@ SOMParser = Grammar (
   formula = ( ^ self binaryOperand , self binaryMessage star )
 
   nestedTerm = ( ^
-    self NewTerm , (self sym: #expression) , self EndTerm
+    self NewTerm , (self sym: #expression) , self EndTerm action: [ :t | t at: 2 ]
   )
 
   literal = ( ^
