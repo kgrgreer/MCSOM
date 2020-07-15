@@ -1,5 +1,7 @@
 AttributeGrammar = SOMParser (
 
+  | instanceFields_ |
+
   print: v = (
     v class = Vector ifTrue: [ v :=   v asArray ].
     v class = Array ifTrue: [
@@ -41,7 +43,20 @@ AttributeGrammar = SOMParser (
   )
 
   variable = (
-    ^ super variable action: [ :v | ASTVariable new: v ]
+    ^ super variable action: [ :v | | found |
+      found := false.
+      instanceFields_ ifNotNil: [
+      ('================================= ABC ' + v + ' ' + (v class) + ' ' + instanceFields_ + (instanceFields_ contains: v) + ' ' + (instanceFields_ at: 1) + ' ' + ((instanceFields_ at: 1) class)) println.
+      ].
+      instanceFields_ do: [ :f |
+        f name = v ifTrue: [ found := true ]
+      ].
+      found ifTrue: [
+        ASTInstanceVariable new: v
+      ] ifFalse: [
+        ASTVariable new: v
+      ]
+    ]
   )
 
   keywordPattern = (
@@ -115,25 +130,28 @@ AttributeGrammar = SOMParser (
       ms   := e at: 2.
 
       ms ifNotNil: [
-      ms class = Array ifTrue: [
-        ms do: [ :a |
-          a do: [ :m |
-            m obj: expr.
-            expr := m.
+        ms class = Array ifTrue: [
+          ms do: [ :a |
+            a do: [ :m |
+              m obj: expr.
+              expr := m.
+            ]
           ]
-        ]
-      ] ifFalse: [
-        ms obj: expr.
-        expr := m
-      ].
+        ] ifFalse: [
+          ms obj: expr.
+          expr := m
+        ].
       ].
       expr
     ]
   )
 
   instanceFields = (
-    ^ super instanceFields action: [ :cd |
-      cd ifNotNil: [ cd at: 2 ]
+    ^ super instanceFields action: [ :fields |
+      fields
+        ifNil: [ instanceFields_ := nil ]
+        ifNotNil: [ instanceFields_ := (fields at: 2) ].
+      instanceFields_
     ]
   )
 

@@ -1,16 +1,15 @@
-ASTVariable = (
+ASTInstanceVariable = (
   | name |
 
-  name = ( ^ name )
   name: v = ( name := v )
 
   asString = ( ^ name )
 
-  toC = ( ^ name )
+  toC = ( ^ 'self.' + name )
 
 ----
   new: name = ( | v |
-    v := ASTVariable new.
+    v := ASTInstanceVariable new.
     v name: name.
     ^v
   )

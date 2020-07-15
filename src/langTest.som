@@ -81,6 +81,7 @@ Test = (
     true println.
     false println.
     nil println.
+    a println.
     (1 + 2) println.
   )
 )
