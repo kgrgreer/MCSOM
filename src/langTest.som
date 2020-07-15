@@ -83,6 +83,9 @@ Test = (
     nil println.
     a println.
     (1 + 2) println.
+    a := 1.
+    b := 2.
+    (a + b) println.
   )
 )
 '.

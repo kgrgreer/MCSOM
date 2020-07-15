@@ -1,0 +1,19 @@
+ASTAssignment = (
+  | var expr |
+
+  var: v = ( var := v )
+  expr: v = ( expr := v )
+
+  asString = ( ^ self toC )
+
+  toC = ( ^ (var toC) + ' = ' + (expr toC) )
+
+----
+  var: v expr: e = ( | o |
+    o := ASTAssignment new.
+    ('============================================= ABC ' + v) println.
+    o var: v.
+    o expr: e.
+    ^o
+  )
+)

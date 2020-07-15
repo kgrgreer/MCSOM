@@ -45,6 +45,7 @@ AttributeGrammar = SOMParser (
   variable = (
     ^ super variable action: [ :v | | found |
       found := false.
+      "TODO: this could be done more efficiently"
       instanceFields_ do: [ :f |
         f name = v ifTrue: [ found := true ]
       ].

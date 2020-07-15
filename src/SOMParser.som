@@ -93,7 +93,9 @@ SOMParser = Grammar (
 
   expression = ( ^ self assignation || self evaluation )
 
-  assignation = ( ^ self assignments , self evaluation )
+  assignation = ( ^ self assignments , self evaluation action: [ :a |
+    ASTAssignment var: (((a at: 1) at: 1) at: 1) expr: (a at: 2)
+  ])
 
   assignments = ( ^ self assignment plus )
 
