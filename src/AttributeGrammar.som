@@ -45,9 +45,6 @@ AttributeGrammar = SOMParser (
   variable = (
     ^ super variable action: [ :v | | found |
       found := false.
-      instanceFields_ ifNotNil: [
-      ('================================= ABC ' + v + ' ' + (v class) + ' ' + instanceFields_ + (instanceFields_ contains: v) + ' ' + (instanceFields_ at: 1) + ' ' + ((instanceFields_ at: 1) class)) println.
-      ].
       instanceFields_ do: [ :f |
         f name = v ifTrue: [ found := true ]
       ].
