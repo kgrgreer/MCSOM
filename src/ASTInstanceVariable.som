@@ -5,7 +5,7 @@ ASTInstanceVariable = (
 
   asString = ( ^ name )
 
-  toC = ( ^ 'self.' + name )
+  toC = ( ^ 'self->' + name )
 
 ----
   new: name = ( | v |

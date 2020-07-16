@@ -83,7 +83,8 @@ AttributeGrammar = SOMParser (
             ]
             ifFalse: [
               exp := ASTExpression expr: (bb at: 1).
-              bb length = 2 ifTrue: [
+              bb length = 2 && [ (bb at: 2) notNil ] ifTrue: [
+               ('========================== ABC ' + bb + ' ' + (bb at: 2)) println.
                 exp tail: ((bb at: 2) at: 2)
               ].
               exp

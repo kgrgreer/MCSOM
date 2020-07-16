@@ -11,7 +11,6 @@ ASTAssignment = (
 ----
   var: v expr: e = ( | o |
     o := ASTAssignment new.
-    ('============================================= ABC ' + v) println.
     o var: v.
     o expr: e.
     ^o

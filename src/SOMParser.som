@@ -184,6 +184,7 @@ SOMParser = Grammar (
       (self sym: #blockPattern)  optional ,
       (self sym: #blockContents) optional ,
     self EndBlock
+    action: [ :b | ASTBlock pattern: (b at: 2) content: (b at: 3) ]
   )
 
   blockPattern = ( ^ (self blockArguments) , (self Or) )

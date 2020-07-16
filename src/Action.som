@@ -8,8 +8,10 @@ Action = Parser (
     ps := parser parse: ps.
     '-------------- action: ' println.
     parser println.
-    ps notNil ifTrue: [ ps := ps value: (block value: ps value).
-    ('value: ' + ps value) println ].
+    ps notNil ifTrue: [
+      ps := ps value: (block value: ps value).
+      ('-------------- value: ' + ps value) println
+    ].
     ^ ps
   )
 

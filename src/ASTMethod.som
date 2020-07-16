@@ -18,10 +18,14 @@ ASTMethod = (
   toC = ( | s |
     holder ifNil: [ holder := Object ].
     s := '\n'.
-    s := s + '\nSObject ' + (holder name) + '_' + pattern + '(SObject *self_) {\n'.
+    s := s + '\nSObject ' + (holder name) + '_' + pattern + '(SObject self_'.
+    pattern args do: [ :a |
+      s := s + ', SObject ' + a
+    ].
+    s := s + ') {\n'.
     s := s + '  ' + (holder name) + ' self = (' + (holder name) + ') self_;\n'.    localDefs ifNotNil: [
       localDefs do: [ :def |
-        s := s + '  SObject *' + def + ';\n'
+        s := s + '  SObject ' + def + ' = nil;\n'
       ].
       s := s + '\n'
     ].
@@ -55,7 +59,6 @@ ASTMethod = (
       methods__ at: (p signature) put: index.
     ].
     m index: index.
-    "CGenerator instance addMethod: m."
     ^m
   )
 )

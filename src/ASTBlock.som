@@ -1,0 +1,24 @@
+ASTBlock = (
+  | pattern content |
+
+  pattern: v = ( pattern := v )
+  content: v = ( content := v )
+
+  asString = ( ^ self toC )
+
+  toC = ( | s |
+    s := 'BLOCK:['.
+    pattern ifNotNil: [ s := s + pattern + ' | ' ].
+    content ifNotNil: [ s := s + content ].
+    s := s + ']'.
+    ^s
+  )
+
+----
+  pattern: p content: c = ( | o |
+    o := ASTBlock new.
+    o pattern: p.
+    o content: c.
+    ^o
+  )
+)

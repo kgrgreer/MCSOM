@@ -5,11 +5,10 @@ ASTMessage = (
   selector: v = ( selector := v )
   args:     v = ( args     := v )
 
-  asString = (
-    ^ self toC
-  )
+  asString = ( ^ self toC )
 
   toC = ( | s |
+"  s := 'MSG(' + (obj toC) + ', METHOD_' + selector."
     s := 'MSG(' + (obj toC) + ', ' + selector.
     args do: [ :a |
       s := s + ', ' + (a toC)

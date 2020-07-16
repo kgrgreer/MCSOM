@@ -21,7 +21,7 @@ ASTClass = (
     s := s + '  SClass *class;\n'.
 
     fields do: [ :f |
-      s := s + '  SObject *' + f + ';\n'.
+      s := s + '  SObject ' + f + ';\n'.
     ].
     s := s + '} ' + name + ';\n'.
 

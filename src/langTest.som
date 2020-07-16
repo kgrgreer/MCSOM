@@ -75,7 +75,12 @@ Nil = (
 
 Test = (
   | a b c def |
-  main = (
+  plus: x and: y = (
+    ^ x + y
+  )
+  main = ( | localVar |
+    localVar := 42.
+    localVar println.
     1 println.
     \'abc\' println.
     true println.
@@ -85,7 +90,12 @@ Test = (
     (1 + 2) println.
     a := 1.
     b := 2.
-    (a + b) println.
+    (a + b + localVar) println.
+    [1]
+    "TODO: method arguments"
+    "following don\'t work
+    this plus: 1 and: 2.
+    []."
   )
 )
 '.
