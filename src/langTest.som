@@ -9,6 +9,7 @@ langTest = (
   )
 
   run = (
+  '-- trace.txt\n' println.
     interp := AttributeGrammar  new.
 
 self test: #program with: 'Integer = (
@@ -91,11 +92,12 @@ Test = (
     a := 1.
     b := 2.
     (a + b + localVar) println.
-    [1]
+"    [1] "
     "TODO: method arguments"
     "following don\'t work
     this plus: 1 and: 2.
-    []."
+    [].
+    "
   )
 )
 '.
