@@ -16,7 +16,7 @@ CGenerator = (
   addLiteral: l = ( literals append: l )
 
   toC = ( | s |
-    s := '\n/********************** CGenerator Output **********************/\n\n'.
+    s := s + '\n/********************** CGenerator Output **********************/\n\n'.
 
     (ASTNumber numbers keys) do: [ :l | | value |
       value := (ASTNumber numbers get: l).
@@ -47,16 +47,6 @@ CGenerator = (
 
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.
-
-    s := s + '-- primitives.c\n'.
-    s := s + '#include "mcsom.h"'.
-    classes do: [ :c |
-      c methods do: [ :m |
-        m isPrimitive ifTrue: [
-          s := s + m toC
-        ]
-      ]
-    ].
 
     ^ s
   )

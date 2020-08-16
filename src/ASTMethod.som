@@ -13,6 +13,12 @@ ASTMethod = (
   signature      = ( ^ pattern name )
   args           = ( ^ pattern args )
 
+  block = (
+    isPrimitive
+      ifTrue: [ ^ '"primitive"\n  ' + (holder name) + ' ' + pattern ]
+      ifFalse: [ ^ block ]
+  )
+
   asString = ( ^ self toC )
 
   toC = ( | s |
@@ -30,7 +36,8 @@ ASTMethod = (
       s := s + '\n'
     ].
     block class println.
-    isPrimitive ifFalse: [ s := s + '  ' + block ].
+"    isPrimitive ifFalse: [ s := s + '  ' + block ]."
+    s := s + '  ' + (self block).
     s := s + '\n}\n'.
     ^s
   )

@@ -26,9 +26,7 @@ ASTClass = (
     s := s + '} ' + name + ';\n'.
 
     methods do: [ :m |
-      m isPrimitive ifFalse: [
-        s := s + m toC.
-      ]
+      s := s + m toC.
     ].
 
     s := s + '\nSMethod ' + name + '_lookup(MethodId method) {\n  switch ( method ) {'.
