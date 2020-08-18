@@ -16,7 +16,7 @@ CGenerator = (
   addLiteral: l = ( literals append: l )
 
   toC = ( | s |
-    s := s + '\n/********************** CGenerator Output **********************/\n\n'.
+    s := '\n/********************** CGenerator Output **********************/\n\n'.
 
     (ASTNumber numbers keys) do: [ :l | | value |
       value := (ASTNumber numbers get: l).
