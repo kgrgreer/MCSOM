@@ -1,5 +1,5 @@
 CGenerator = (
-  | classes literals methods |
+  | classes literals methods prims |
 
   classes = ( ^classes )
 
@@ -7,11 +7,19 @@ CGenerator = (
     classes  := Vector new.
     literals := Vector new.
     methods  := Vector new.
+    prims    := Dictionary new.
+
+    prims at: 'Integer Plus_C' put: '
+      return self.num + argument.num;
+    '
   )
 
   addClass: c = ( classes append: c )
 
-  addMethod: m = ( methods append: m )
+  addMethod: m = (
+    methods append: m.
+    " TODO: set code for primitives"
+  )
 
   addLiteral: l = ( literals append: l )
 
