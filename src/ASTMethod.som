@@ -15,11 +15,13 @@ ASTMethod = (
 
   block = (
     isPrimitive
-      ifTrue: [ ^ '"primitive"\n  ' + (holder name) + ' ' + pattern ]
+      ifTrue: [ ^ '"primitive ' + self toKey + '"\n ' ]
       ifFalse: [ ^ block ]
   )
 
   asString = ( ^ self toC )
+
+  toKey = ( ^ holder name + ' ' + pattern )
 
   toC = ( | s |
     holder ifNil: [ holder := Object ].
