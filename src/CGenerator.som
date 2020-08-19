@@ -11,7 +11,10 @@ CGenerator = (
 
     prims at: 'Integer Plus_C' put: '
       return self.num + argument.num;
-    '
+    '.
+    prims at: 'Integer asString' put: '
+      return "";
+    '.
   )
 
   addClass: c = ( classes append: c )
