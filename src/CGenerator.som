@@ -15,6 +15,10 @@ CGenerator = (
     prims at: 'Integer asString' put: '
       return "";
     '.
+    prims at: 'Integer println' put: '
+      println("%d", self.num);
+      return null;
+    '.
   )
 
   addClass: c = ( classes append: c )
