@@ -30,6 +30,8 @@ CGenerator = (
 
   addLiteral: l = ( literals append: l )
 
+  getPrimitiveCode: key = ( ^ prims at: key )
+
   toC = ( | s |
     s := '\n/********************** CGenerator Output **********************/\n\n'.
 

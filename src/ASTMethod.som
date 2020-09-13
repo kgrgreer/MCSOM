@@ -15,7 +15,7 @@ ASTMethod = (
 
   block = (
     isPrimitive
-      ifTrue: [ ^ '"primitive ' + self toKey + '"\n ' ]
+      ifTrue: [ ^ '"primitive ' + self toKey + '"\n' ]
       ifFalse: [ ^ block ]
   )
 
@@ -37,9 +37,8 @@ ASTMethod = (
       ].
       s := s + '\n'
     ].
-    block class println.
-"    isPrimitive ifFalse: [ s := s + '  ' + block ]."
     s := s + '  ' + (self block).
+    isPrimitive ifTrue: [ s := s + '  ' + ((CGenerator instance) getPrimitiveCode: self toKey) ].
     s := s + '\n}\n'.
     ^s
   )
