@@ -10,7 +10,7 @@ CGenerator = (
     prims    := Dictionary new.
 
     prims at: 'Integer Plus_C' put: '
-      return self.num + argument.num;
+      return self.num + ((Integer) argument).num;
     '.
     prims at: 'Integer asString' put: '
       return "";
@@ -56,12 +56,28 @@ CGenerator = (
       s := s + '#define METHOD_' + m + ' ' + (ASTMethod methods get: m) + '\n'
     ].
 
+    s := s + '\n/* ********************************** DECLARATIONS */\n'.
     classes do: [ :c |
       c == 'String' || [ c == 'Integer' ] ifFalse: [
         s := s + c toH
       ]
     ].
 
+    s := s + '\n/* ********************************** INTERNALS */\n'.
+    s := s + '
+    String newString(char* str) {
+      String obj  = malloc(sizeof(struct String_));
+      int len = strlen(str);
+      char* buf = malloc(len);
+      strcpy(buf, str);
+      obj->class  = (Class *) StringClass;
+      obj->value  = buf;
+      obj->length = newSInteger(len);
+      return obj;
+    }
+    '.
+
+    s := s + '\n/* ********************************** CLASS IMPLEMENTATIONS */\n'.
     classes do: [ :c | s := s + c toC ].
     s := s + '\n'.
 
