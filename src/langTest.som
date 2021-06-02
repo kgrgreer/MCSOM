@@ -70,7 +70,7 @@ Nil = (
     ifNil: aBlock = (^aBlock value)
     ifNotNil: aBlock = (^self)
     ifNil: goBlock ifNotNil: noGoBlock = (^goBlock value)
-    "TODO: next line doesn\'t parse for some reason"
+    "TODO: next line doesnt parse for some reason"
     "do: block = ( )"
 )
 

@@ -3,7 +3,7 @@ AttributeGrammar = SOMParser (
   | instanceFields_ |
 
   print: v = (
-    v class = Vector ifTrue: [ v :=   v asArray ].
+    v class = Vector ifTrue: [ v := v asArray ].
     v class = Array ifTrue: [
       '[' print.
         v do: [ :i | self print: i. ' ' print ].
@@ -84,7 +84,7 @@ AttributeGrammar = SOMParser (
             ifFalse: [
               exp := ASTExpression expr: (bb at: 1).
               bb length = 2 && [ (bb at: 2) notNil ] ifTrue: [
-               ('========================== ABC ' + bb + ' ' + (bb at: 2)) println.
+                ('========================== ABC ' + bb + ' ' + (bb at: 2)) println.
                 exp tail: ((bb at: 2) at: 2)
               ].
               exp
@@ -123,7 +123,7 @@ AttributeGrammar = SOMParser (
   evaluation = (
     ^ super evaluation action: [ :e | | expr ms |
 
-    self print: e.
+      self print: e.
 
       expr := e at: 1.
       ms   := e at: 2.

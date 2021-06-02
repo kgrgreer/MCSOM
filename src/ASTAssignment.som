@@ -1,7 +1,7 @@
 ASTAssignment = (
   | var expr |
 
-  var: v = ( var := v )
+  var:  v = ( var := v )
   expr: v = ( expr := v )
 
   asString = ( ^ self toC )

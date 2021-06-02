@@ -49,7 +49,7 @@ ASTClass = (
 ----
   new: n = ( | c |
     c := ASTClass new.
-    c name: n.
+    c name:    n.
     c extends: 'Object'.
     c fields:  Vector new.
     c methods: Vector new.

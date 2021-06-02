@@ -3,9 +3,9 @@ ASTMethod = (
 
   holder:      v = ( holder      := v )
   pattern        = ( ^pattern )
+  pattern:     v = ( pattern     := v )
   index:       v = ( index       := v )
   index          = ( ^index )
-  pattern:     v = ( pattern     := v )
   localDefs:   v = ( localDefs   := v )
   block:       v = ( block       := v )
   isPrimitive    = ( ^isPrimitive )
@@ -15,7 +15,7 @@ ASTMethod = (
 
   block = (
     isPrimitive
-      ifTrue: [ ^ '"primitive ' + self toKey + '"\n' ]
+      ifTrue:  [ ^ '"primitive ' + self toKey + '"\n' ]
       ifFalse: [ ^ block ]
   )
 
