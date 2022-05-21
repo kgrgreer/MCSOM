@@ -5,24 +5,24 @@ Assembler = (
     | ret |
     ret := ''.
     14 downTo: 0 do: [ :i | ret := ret + (((1 << i) & number) >>> i). ].
-    ^ ret.
+    ^ ret
   )
 
   AT: number = (
-    self emitA: (self toBinary: number).
+    self emitA: (self toBinary: number)
   )
 
   emit: a = (
     output append: a.
-    addr := addr + 1.
+    addr := addr + 1
   )
 
   emitA: arg = (
-    self emit: (Vector new) , '0' , arg.
+    self emit: (Vector new) , '0' , arg
   )
 
   emitC: op comp: comp jump: jump = (
-    self emit: (Vector new) , '111' , op , (comps at: comp) , jump.
+    self emit: (Vector new) , '111' , op , (comps at: comp) , jump
   )
 
   NULL: comp jump: jmp  = ( self emitC: '009' comp: comp jump: jmp )
@@ -64,9 +64,7 @@ Assembler = (
     syms at: 'THAT'   put: '4'.
 
     "R0..R15 = 0..15"
-    0 to: 15 do: [ :i |
-      syms at: ( 'R' + i ) put: i.
-    ].
+    0 to: 15 do: [ :i | syms at: ( 'R' + i ) put: i ].
 
     comps := Dictionary new.
     comps at: 0     put: '0101010'.
@@ -79,36 +77,36 @@ Assembler = (
     comps at: '-1'  put: '0111010'.
     comps at: 'D'   put: '0001100'.
     comps at: 'A'   put: '0110000'.
-    comps at: '!D'  put: '0'.
-    comps at: '!A'  put: '0'.
-    comps at: '-D'  put: '0'.
-    comps at: '-A'  put: '0'.
-    comps at: 'D+1' put: '0'.
-    comps at: 'A+1' put: '0'.
-    comps at: 'D-1' put: '0'.
-    comps at: 'A-1' put: '0'.
-    comps at: 'D+A' put: '0'.
-    comps at: 'D-A' put: '0'.
-    comps at: 'A-D' put: '0'.
-    comps at: 'D&A' put: '0'.
-    comps at: 'D|A' put: '0'.
-    comps at: M     put: '1'.
-    comps at: 'M'   put: '1'.
-    comps at: '!M'  put: '1'.
-    comps at: '-M'  put: '1'.
-    comps at: 'M+1' put: '1'.
-    comps at: 'M-1' put: '1'.
-    comps at: 'D+M' put: '1'.
-    comps at: 'D-M' put: '1'.
-    comps at: 'M-D' put: '1'.
-    comps at: 'D&M' put: '1'.
-    comps at: 'D|M' put: '1'.
+    comps at: '!D'  put: '0001101'.
+    comps at: '!A'  put: '0110001'.
+    comps at: '-D'  put: '0001111'.
+    comps at: '-A'  put: '0110011'.
+    comps at: 'D+1' put: '0011111'.
+    comps at: 'A+1' put: '0110111'.
+    comps at: 'D-1' put: '0001110'.
+    comps at: 'A-1' put: '0110010'.
+    comps at: 'D+A' put: '0000010'.
+    comps at: 'D-A' put: '0010011'.
+    comps at: 'A-D' put: '0000111'.
+    comps at: 'D&A' put: '0000000'.
+    comps at: 'D|A' put: '0010101'.
+    comps at: M     put: '1110000'.
+    comps at: 'M'   put: '1110000'.
+    comps at: '!M'  put: '1110001'.
+    comps at: '-M'  put: '1110011'.
+    comps at: 'M+1' put: '1110111'.
+    comps at: 'M-1' put: '1110010'.
+    comps at: 'D+M' put: '1000010'.
+    comps at: 'D-M' put: '1010011'.
+    comps at: 'M-D' put: '1000111'.
+    comps at: 'D&M' put: '1000000'.
+    comps at: 'D|M' put: '1010101'.
 
     addr := 16.
     self code.
     output do: [ :a |
       a do: [ :e | e print ].
-      '' println.
+      '' println
     ]
   )
 
