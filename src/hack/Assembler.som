@@ -72,8 +72,8 @@ Assembler = (
     comps at: 0     put: '0101010'.
     comps at: 1     put: '0111111'.
     comps at: -1    put: '0111010'.
-    comps at: 'D'   put: '0001100'.
-    comps at: 'A'   put: '0110000'.
+    comps at: D     put: '0001100'.
+    comps at: A     put: '0110000'.
     comps at: '0'   put: '0101010'.
     comps at: '1'   put: '0111111'.
     comps at: '-1'  put: '0111010'.
@@ -107,7 +107,8 @@ Assembler = (
     addr := 16.
     self code.
     output do: [ :a |
-      a println.
+      a do: [ :e | e print ].
+      '' println.
     ]
   )
 
