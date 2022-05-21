@@ -1,5 +1,5 @@
 Assembler = (
-  | JGT JEQ JGE JLT JNE JLE JMP  NULL M D MD A AM AD AMD  addr comps syms output |
+  | JGT JEQ JGE JLT JNE JLE JMP  NULL M D MD A AM AD AMD  addr ops syms output |
 
   toBinary: number = (
     | ret |
@@ -8,8 +8,25 @@ Assembler = (
     ^ ret
   )
 
-  AT: number = (
-    self emitA: (self toBinary: number)
+  sym: s = (
+    (syms containsKey: s) ifFalse: [
+      (syms at: s put: nil)
+    ].
+    ^ (syms pairAt: s)
+  )
+
+  LABEL: sym = (
+    syms at: sym put: addr
+  )
+
+  AT: arg = (
+    (arg class) = Integer ifFalse: [
+      | sym |
+      sym := self sym: arg.
+      sym value = nil ifTrue: [ sym value: addr ].
+      arg := sym value
+    ].
+    self emitA: (self toBinary: arg)
   )
 
   emit: a = (
@@ -22,7 +39,7 @@ Assembler = (
   )
 
   emitC: op comp: comp jump: jump = (
-    self emit: (Vector new) , '111' , op , (comps at: comp) , jump
+    self emit: (Vector new) , '111' , op , (ops at: comp) , jump
   )
 
   NULL: comp jump: jmp  = ( self emitC: '009' comp: comp jump: jmp )
@@ -41,11 +58,12 @@ Assembler = (
   AD: comp              = ( self AM: comp jump: NULL )
   AMD: comp jump: jmp   = ( self emitC: '111' comp: comp jump: jmp )
   AMD: comp             = ( self AMD: comp jump: NULL )
+  jump: jmp             = ( self NULL: 0 jump: jmp )
 
   assemble = (
     output := Vector new.
 
-    NULL := '000'.
+    NULL        := '000'.
     JGT := M    := '001'.
     JEQ := D    := '010'.
     JGE := MD   := '011'.
@@ -66,41 +84,41 @@ Assembler = (
     "R0..R15 = 0..15"
     0 to: 15 do: [ :i | syms at: ( 'R' + i ) put: i ].
 
-    comps := Dictionary new.
-    comps at: 0     put: '0101010'.
-    comps at: 1     put: '0111111'.
-    comps at: -1    put: '0111010'.
-    comps at: D     put: '0001100'.
-    comps at: A     put: '0110000'.
-    comps at: '0'   put: '0101010'.
-    comps at: '1'   put: '0111111'.
-    comps at: '-1'  put: '0111010'.
-    comps at: 'D'   put: '0001100'.
-    comps at: 'A'   put: '0110000'.
-    comps at: '!D'  put: '0001101'.
-    comps at: '!A'  put: '0110001'.
-    comps at: '-D'  put: '0001111'.
-    comps at: '-A'  put: '0110011'.
-    comps at: 'D+1' put: '0011111'.
-    comps at: 'A+1' put: '0110111'.
-    comps at: 'D-1' put: '0001110'.
-    comps at: 'A-1' put: '0110010'.
-    comps at: 'D+A' put: '0000010'.
-    comps at: 'D-A' put: '0010011'.
-    comps at: 'A-D' put: '0000111'.
-    comps at: 'D&A' put: '0000000'.
-    comps at: 'D|A' put: '0010101'.
-    comps at: M     put: '1110000'.
-    comps at: 'M'   put: '1110000'.
-    comps at: '!M'  put: '1110001'.
-    comps at: '-M'  put: '1110011'.
-    comps at: 'M+1' put: '1110111'.
-    comps at: 'M-1' put: '1110010'.
-    comps at: 'D+M' put: '1000010'.
-    comps at: 'D-M' put: '1010011'.
-    comps at: 'M-D' put: '1000111'.
-    comps at: 'D&M' put: '1000000'.
-    comps at: 'D|M' put: '1010101'.
+    ops := Dictionary new.
+    ops at: 0     put: '0101010'.
+    ops at: 1     put: '0111111'.
+    ops at: -1    put: '0111010'.
+    ops at: D     put: '0001100'.
+    ops at: A     put: '0110000'.
+    ops at: '0'   put: '0101010'.
+    ops at: '1'   put: '0111111'.
+    ops at: '-1'  put: '0111010'.
+    ops at: 'D'   put: '0001100'.
+    ops at: 'A'   put: '0110000'.
+    ops at: '!D'  put: '0001101'.
+    ops at: '!A'  put: '0110001'.
+    ops at: '-D'  put: '0001111'.
+    ops at: '-A'  put: '0110011'.
+    ops at: 'D+1' put: '0011111'.
+    ops at: 'A+1' put: '0110111'.
+    ops at: 'D-1' put: '0001110'.
+    ops at: 'A-1' put: '0110010'.
+    ops at: 'D+A' put: '0000010'.
+    ops at: 'D-A' put: '0010011'.
+    ops at: 'A-D' put: '0000111'.
+    ops at: 'D&A' put: '0000000'.
+    ops at: 'D|A' put: '0010101'.
+    ops at: M     put: '1110000'.
+    ops at: 'M'   put: '1110000'.
+    ops at: '!M'  put: '1110001'.
+    ops at: '-M'  put: '1110011'.
+    ops at: 'M+1' put: '1110111'.
+    ops at: 'M-1' put: '1110010'.
+    ops at: 'D+M' put: '1000010'.
+    ops at: 'D-M' put: '1010011'.
+    ops at: 'M-D' put: '1000111'.
+    ops at: 'D&M' put: '1000000'.
+    ops at: 'D|M' put: '1010101'.
 
     addr := 16.
     self code.
@@ -112,14 +130,37 @@ Assembler = (
 
   code = (
     | |
-    self AT: 4.
-    self AT: 65.
+    self AT: 'i'.
+    self M:  1.
+    self AT: 'sum'.
     self M: 0.
-    self M: 1.
-    self M: D jump: JLE.
-    self M: 0.
-    self M: 1.
-    self M: 0.
+    self LABEL: #LOOP.
+    self AT: 'i'.
+    self D: M.
+    self AT: 'R0'.
+    self D: 'D-M'.
+    self AT: 'WRITE'.
+    self D: 0 jump: JGT.
+    self AT: 'i'.
+    self D: M.
+    self AT: 'sum'.
+    self M: 'D+M'.
+    self AT: 'i'.
+    self M: 'M+1'.
+    self AT: #LOOP.
+    self jump: JMP.
+
+    self LABEL: #WRITE.
+    self AT: 'sum'.
+    self D: M.
+    self AT: 'R1'.
+    self M: D.
+
+    self LABEL: #END.
+    self AT: #END.
+    self jump: JMP.
+
+
     "
     // Computes 1+...+RAM[0]
 // And stored the sum in RAM[1]
