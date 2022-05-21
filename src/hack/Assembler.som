@@ -1,6 +1,3 @@
-
-
-
 Assembler = (
   | JGT JEQ JGE JLT JNE JLE JMP  NULL M D MD A AM AD AMD  addr comps syms output |
 
@@ -12,7 +9,7 @@ Assembler = (
   )
 
   AT: number = (
-    self emit: (self toBinary: number).
+    self emitA: (self toBinary: number).
   )
 
   emit: a = (
@@ -110,7 +107,6 @@ Assembler = (
     addr := 16.
     self code.
     output do: [ :a |
-      'output:' println.
       a println.
     ]
   )
