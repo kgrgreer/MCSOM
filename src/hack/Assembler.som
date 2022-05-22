@@ -19,7 +19,7 @@ Assembler = (
     syms at: sym put: addr
   )
 
-  AT: arg = (
+  @ arg = (
     (arg class) = Integer ifFalse: [
       | sym |
       sym := self sym: arg.
@@ -129,35 +129,34 @@ Assembler = (
   )
 
   code = (
-    | |
-    self AT: 'i'.
+    self @ 'i'.
     self M:  1.
-    self AT: 'sum'.
+    self @ 'sum'.
     self M: 0.
     self LABEL: #LOOP.
-    self AT: 'i'.
+    self @ 'i'.
     self D: M.
-    self AT: 'R0'.
+    self @ 'R0'.
     self D: 'D-M'.
-    self AT: 'WRITE'.
+    self @ 'WRITE'.
     self D: 0 jump: JGT.
-    self AT: 'i'.
+    self @ 'i'.
     self D: M.
-    self AT: 'sum'.
+    self @ 'sum'.
     self M: 'D+M'.
-    self AT: 'i'.
+    self @ 'i'.
     self M: 'M+1'.
-    self AT: #LOOP.
+    self @ #LOOP.
     self jump: JMP.
 
     self LABEL: #WRITE.
-    self AT: 'sum'.
+    self @ 'sum'.
     self D: M.
-    self AT: 'R1'.
+    self @ 'R1'.
     self M: D.
 
     self LABEL: #END.
-    self AT: #END.
+    self @ #END.
     self jump: JMP.
 
 
