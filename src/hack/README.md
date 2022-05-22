@@ -8,3 +8,8 @@ uses native SOM syntax to create an internal DSL. This has a number of advantage
 1. No parser needed to be written.
 2. Full language features. Language features like ignoring whitespace, comments, variables, conditionals, sub-routines, inheritance, libraries, loops, etc. are all added to the assembler without any additional effort.
 3. Extensible. Rather than just being a simple literal assembler, powerful macros can be written in SOM to incrementally make the assembler into a higher-level language.
+
+## Goals
+
+The ultimate goal of this project is to create an ARM Cortex-M0 assembler for use in my SOM compiler.
+However, I thought it might be worthwhile to test out the approach on a simpler assembly language first.
