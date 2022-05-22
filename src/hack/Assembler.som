@@ -9,9 +9,9 @@ Assembler = (
 
   sym: s = (
     (syms containsKey: s) ifFalse: [
-      (syms at: s put: nil)
+      syms at: s put: nil
     ].
-    ^ (syms pairAt: s)
+    ^ syms pairAt: s
   )
 
   LABEL: sym = ( syms at: sym put: pc )
@@ -22,9 +22,8 @@ Assembler = (
       sym := self sym: arg.
       sym value = nil ifTrue: [ sym value: pc ].
       arg := sym
-      "arg := sym value"
     ].
-    self emitA: arg "(self toBinary: arg)"
+    self emitA: arg
   )
 
   emit: a = ( output append: a. pc := pc + 1 )
@@ -53,7 +52,7 @@ Assembler = (
   AMD: comp             = ( self AMD: comp jump: NULL )
   jump: jmp             = ( self NULL: 0 jump: jmp )
 
-  assemble = (
+  init = (
     output := Vector new.
 
     NULL        := '000'.
@@ -141,5 +140,5 @@ Assembler = (
     ]
   )
 
-  run = (self assemble)
+  run = (self init)
 )
