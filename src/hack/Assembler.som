@@ -1,8 +1,5 @@
 Assembler = (
   |
-    " Jump Operators "
-    NULL JGT JEQ JGE JLT JNE JLE JMP
-
     " Program Counter - Memory location of next instruction. Starts at 16. "
     pc
 
@@ -14,9 +11,13 @@ Assembler = (
 
     " A Vector of Emitted Machine Code "
     output
+
+    " Jump Operators "
+    NULL JGT JEQ JGE JLT JNE JLE JMP
   |
 
   toBinary: number = ( | ret |
+    "Encode an Integer as a 15 digit Binary String"
     ret := ''.
     14 downTo: 0 do: [ :i | ret := ret + (((1 << i) & number) >>> i). ].
     ^ ret
@@ -70,15 +71,7 @@ Assembler = (
 
   init = (
     output := Vector new.
-
-    NULL := '000'.
-    JGT  := '001'.
-    JEQ  := '010'.
-    JGE  := '011'.
-    JLT  := '100'.
-    JNE  := '101'.
-    JLE  := '110'.
-    JMP  := '111'.
+    pc := 16.
 
     syms := Dictionary new.
     syms at: 'SCREEN' put: '16384'.
@@ -97,32 +90,25 @@ Assembler = (
     ops at: '1'   put: '0111111'.
     ops at: '-1'  put: '0111010'.
     ops at: 'D'   put: '0001100'.
-    ops at: 'A'   put: '0110000'.
-    ops at: '!D'  put: '0001101'.
-    ops at: '!A'  put: '0110001'.
+    ops at: 'A'   put: '0110000'.  ops at: 'M'   put: '1110000'.
+    ops at: '!D'  put: '0001101'.  ops at: '!M'  put: '1110001'.
+    ops at: '!A'  put: '0110001'.  ops at: '!M'  put: '1110001'.
     ops at: '-D'  put: '0001111'.
-    ops at: '-A'  put: '0110011'.
+    ops at: '-A'  put: '0110011'.  ops at: '-M'  put: '1110011'.
     ops at: 'D+1' put: '0011111'.
-    ops at: 'A+1' put: '0110111'.
+    ops at: 'A+1' put: '0110111'.  ops at: 'M+1' put: '1110111'.
     ops at: 'D-1' put: '0001110'.
-    ops at: 'A-1' put: '0110010'.
-    ops at: 'D+A' put: '0000010'.
-    ops at: 'D-A' put: '0010011'.
-    ops at: 'A-D' put: '0000111'.
-    ops at: 'D&A' put: '0000000'.
-    ops at: 'D|A' put: '0010101'.
-    ops at: 'M'   put: '1110000'.
-    ops at: '!M'  put: '1110001'.
-    ops at: '-M'  put: '1110011'.
-    ops at: 'M+1' put: '1110111'.
-    ops at: 'M-1' put: '1110010'.
-    ops at: 'D+M' put: '1000010'.
-    ops at: 'D-M' put: '1010011'.
-    ops at: 'M-D' put: '1000111'.
-    ops at: 'D&M' put: '1000000'.
-    ops at: 'D|M' put: '1010101'.
+    ops at: 'A-1' put: '0110010'.  ops at: 'M-1' put: '1110010'.
+    ops at: 'D+A' put: '0000010'.  ops at: 'D+M' put: '1000010'.
+    ops at: 'D-A' put: '0010011'.  ops at: 'D-M' put: '1010011'.
+    ops at: 'A-D' put: '0000111'.  ops at: 'M-D' put: '1000111'.
+    ops at: 'D&A' put: '0000000'.  ops at: 'D&M' put: '1000000'.
+    ops at: 'D|A' put: '0010101'.  ops at: 'D|M' put: '1010101'.
 
-    pc := 16.
+    NULL := '000'.  JGT  := '001'.  JEQ  := '010'.  JGE  := '011'.
+    JLT  := '100'.  JNE  := '101'.  JLE  := '110'.  JMP  := '111'.
+
+    " Two passes allow for forward symbol references: "
     self code.
     self generate
   )
