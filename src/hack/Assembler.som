@@ -24,9 +24,10 @@ Assembler = (
       | sym |
       sym := self sym: arg.
       sym value = nil ifTrue: [ sym value: addr ].
-      arg := sym value
+      arg := sym
+      "arg := sym value"
     ].
-    self emitA: (self toBinary: arg)
+    self emitA: arg "(self toBinary: arg)"
   )
 
   emit: a = (
@@ -122,8 +123,28 @@ Assembler = (
 
     addr := 16.
     self code.
+    self generate
+  )
+
+  generate: o = (
+    | c |
+    c := o class.
+    c = Pair ifTrue: [
+      o := o value.
+      c := o class.
+    ].
+    c = Integer ifTrue: [
+      o := self toBinary: o.
+      c := o class.
+    ].
+    c = String ifTrue: [
+      o print
+    ]
+  )
+
+  generate = (
     output do: [ :a |
-      a do: [ :e | e print ].
+      a do: [ :e | self generate: e ].
       '' println
     ]
   )
@@ -133,11 +154,15 @@ Assembler = (
     " Computes 1+...+RAM[0] "
     " And stored the sum in RAM[1] "
 
+
+  self @ #L2.
+  self jump: JMP.
+self LABEL: #L2.
     self @ 'i'.
     self M: 1.    "i = 1"
     self @ 'sum'.
     self M: 0.     "sum = 0"
-    self LABEL: #LOOP.
+  self LABEL: #LOOP.
     self @ 'i'. " if i > RAM[0] goto WRITE"
     self D: M.
     self @ 'R0'.
@@ -153,13 +178,13 @@ Assembler = (
     self @ #LOOP.
     self jump: JMP. "GOTO LOOP"
 
-    self LABEL: #WRITE.
+  self LABEL: #WRITE.
     self @ 'sum'.
     self D: M.
     self @ 'R1'.
     self M: D. "RAM[1] = the sum"
 
-    self LABEL: #END.
+  self LABEL: #END.
     self @ #END.
     self jump: JMP.
   )
