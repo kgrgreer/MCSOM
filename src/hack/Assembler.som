@@ -1,5 +1,23 @@
 Assembler = (
-  | JGT JEQ JGE JLT JNE JLE JMP  NULL M D MD A AM AD AMD  pc ops syms output |
+  |
+    " Jump Operators "
+    JGT JEQ JGE JLT JNE JLE JMP
+
+    " Computed Values "
+    NULL M D MD A AM AD AMD
+
+    " Program Counter - Memory location of next instruction. Starts at 16. "
+    pc
+
+    " Dictionary of Opcode Mnemonics to Binary Encodings "
+    ops
+
+    " Symbol Table "
+    syms
+
+    " A Vector of Emitted Machine Code "
+    output
+  |
 
   toBinary: number = ( | ret |
     ret := ''.
