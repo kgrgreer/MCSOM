@@ -118,19 +118,9 @@ Assembler = (
   )
 
   generate: o = (
-    | c |
-    c := o class.
-    c = Pair ifTrue: [
-      o := o value.
-      c := o class.
-    ].
-    c = Integer ifTrue: [
-      o := self toBinary: o.
-      c := o class.
-    ].
-    c = String ifTrue: [
-      o print
-    ]
+    o class = Pair    ifTrue: [ o := o value. ].
+    o class = Integer ifTrue: [ o := self toBinary: o. ].
+    o class = String  ifTrue: [ o print ]
   )
 
   generate = (
