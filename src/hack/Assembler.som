@@ -129,31 +129,33 @@ Assembler = (
   )
 
   code = (
+   " Computes 1+...+RAM[0] "
+   " And stored the sum in RAM[1] "
     self @ 'i'.
-    self M:  1.
+    self M:  1.    "i = 1"
     self @ 'sum'.
-    self M: 0.
+    self M: 0.     "sum = 0"
     self LABEL: #LOOP.
-    self @ 'i'.
+    self @ 'i'. " if i > RAM[0] goto WRITE"
     self D: M.
     self @ 'R0'.
     self D: 'D-M'.
     self @ 'WRITE'.
     self D: 0 jump: JGT.
-    self @ 'i'.
+    self @ 'i'. "sum += 1"
     self D: M.
     self @ 'sum'.
     self M: 'D+M'.
-    self @ 'i'.
+    self @ 'i'. "i++"
     self M: 'M+1'.
     self @ #LOOP.
-    self jump: JMP.
+    self jump: JMP. "GOTO LOOP"
 
     self LABEL: #WRITE.
     self @ 'sum'.
     self D: M.
     self @ 'R1'.
-    self M: D.
+    self M: D. "RAM[1] = the sum"
 
     self LABEL: #END.
     self @ #END.
