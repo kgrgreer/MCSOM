@@ -1,8 +1,7 @@
 Assembler = (
-  | JGT JEQ JGE JLT JNE JLE JMP  NULL M D MD A AM AD AMD  addr ops syms output |
+  | JGT JEQ JGE JLT JNE JLE JMP  NULL M D MD A AM AD AMD  pc ops syms output |
 
-  toBinary: number = (
-    | ret |
+  toBinary: number = ( | ret |
     ret := ''.
     14 downTo: 0 do: [ :i | ret := ret + (((1 << i) & number) >>> i). ].
     ^ ret
@@ -15,29 +14,22 @@ Assembler = (
     ^ (syms pairAt: s)
   )
 
-  LABEL: sym = (
-    syms at: sym put: addr
-  )
+  LABEL: sym = ( syms at: sym put: pc )
 
   @ arg = (
     (arg class) = Integer ifFalse: [
       | sym |
       sym := self sym: arg.
-      sym value = nil ifTrue: [ sym value: addr ].
+      sym value = nil ifTrue: [ sym value: pc ].
       arg := sym
       "arg := sym value"
     ].
     self emitA: arg "(self toBinary: arg)"
   )
 
-  emit: a = (
-    output append: a.
-    addr := addr + 1
-  )
+  emit: a = ( output append: a. pc := pc + 1 )
 
-  emitA: arg = (
-    self emit: (Vector new) , '0' , arg
-  )
+  emitA: arg = ( self emit: (Vector new) , '0' , arg )
 
   emitC: op comp: comp jump: jump = (
     self emit: (Vector new) , '111' , op , (ops at: comp) , jump
@@ -121,7 +113,7 @@ Assembler = (
     ops at: 'D&M' put: '1000000'.
     ops at: 'D|M' put: '1010101'.
 
-    addr := 16.
+    pc := 16.
     self code.
     self generate
   )
@@ -150,5 +142,4 @@ Assembler = (
   )
 
   run = (self assemble)
-
 )
