@@ -1,0 +1,37 @@
+Prog1 = Assembler (
+  code = (
+    " Source: https://www.csie.ntu.edu.tw/~cyy/courses/introCS/17fall/lectures/handouts/lec10_HackAssembler_4up.pdf"
+    " Computes 1+...+RAM[0] "
+    " And stored the sum in RAM[1] "
+
+    self @ 'i'.
+    self M: 1.    "i = 1"
+    self @ 'sum'.
+    self M: 0.     "sum = 0"
+  self LABEL: #LOOP.
+    self @ 'i'. " if i > RAM[0] goto WRITE"
+    self D: M.
+    self @ 'R0'.
+    self D: 'D-M'.
+    self @ 'WRITE'.
+    self D: 0 jump: JGT.
+    self @ 'i'. "sum += 1"
+    self D: M.
+    self @ 'sum'.
+    self M: 'D+M'.
+    self @ 'i'. "i++"
+    self M: 'M+1'.
+    self @ #LOOP.
+    self jump: JMP. "GOTO LOOP"
+
+  self LABEL: #WRITE.
+    self @ 'sum'.
+    self D: M.
+    self @ 'R1'.
+    self M: D. "RAM[1] = the sum"
+
+  self LABEL: #END.
+    self @ #END.
+    self jump: JMP.
+  )
+)
