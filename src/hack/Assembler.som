@@ -1,10 +1,7 @@
 Assembler = (
   |
     " Jump Operators "
-    JGT JEQ JGE JLT JNE JLE JMP
-
-    " Computed Values "
-    NULL M D MD A AM AD AMD
+    NULL JGT JEQ JGE JLT JNE JLE JMP
 
     " Program Counter - Memory location of next instruction. Starts at 16. "
     pc
@@ -52,7 +49,7 @@ Assembler = (
     self emit: (Vector new) , '111' , op , (ops at: comp) , jump
   )
 
-  NULL: comp jump: jmp  = ( self emitC: '009' comp: comp jump: jmp )
+  NULL: comp jump: jmp  = ( self emitC: '000' comp: comp jump: jmp )
   NULL: comp            = ( self NULL: comp jump: NULL )
   M: comp jump: jmp     = ( self emitC: '001' comp: comp jump: jmp )
   M: comp               = ( self M: comp jump: NULL )
@@ -68,19 +65,20 @@ Assembler = (
   AD: comp              = ( self AM: comp jump: NULL )
   AMD: comp jump: jmp   = ( self emitC: '111' comp: comp jump: jmp )
   AMD: comp             = ( self AMD: comp jump: NULL )
-  jump: jmp             = ( self NULL: 0 jump: jmp )
+
+  jump: jmp             = ( self NULL: '0' jump: jmp )
 
   init = (
     output := Vector new.
 
-    NULL        := '000'.
-    JGT := M    := '001'.
-    JEQ := D    := '010'.
-    JGE := MD   := '011'.
-    JLT := A    := '100'.
-    JNE := AM   := '101'.
-    JLE := AD   := '110'.
-    JMP := AMD  := '111'.
+    NULL := '000'.
+    JGT  := '001'.
+    JEQ  := '010'.
+    JGE  := '011'.
+    JLT  := '100'.
+    JNE  := '101'.
+    JLE  := '110'.
+    JMP  := '111'.
 
     syms := Dictionary new.
     syms at: 'SCREEN' put: '16384'.
@@ -95,11 +93,6 @@ Assembler = (
     0 to: 15 do: [ :i | syms at: ( 'R' + i ) put: i ].
 
     ops := Dictionary new.
-    ops at: 0     put: '0101010'.
-    ops at: 1     put: '0111111'.
-    ops at: -1    put: '0111010'.
-    ops at: D     put: '0001100'.
-    ops at: A     put: '0110000'.
     ops at: '0'   put: '0101010'.
     ops at: '1'   put: '0111111'.
     ops at: '-1'  put: '0111010'.
@@ -118,7 +111,6 @@ Assembler = (
     ops at: 'A-D' put: '0000111'.
     ops at: 'D&A' put: '0000000'.
     ops at: 'D|A' put: '0010101'.
-    ops at: M     put: '1110000'.
     ops at: 'M'   put: '1110000'.
     ops at: '!M'  put: '1110001'.
     ops at: '-M'  put: '1110011'.
