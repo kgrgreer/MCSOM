@@ -1,0 +1,8 @@
+MacroAssembler = Assembler (
+
+  GOTO: sym = (
+    self @ sym.
+    self jump: JMP.
+  )
+
+)
