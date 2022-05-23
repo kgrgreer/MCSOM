@@ -24,7 +24,6 @@ Prog1M = MacroAssembler (
   self LABEL: #WRITE.
     self MOV: 'sum' TO: 'R1'.
 
-  self LABEL: #END.
-    self GOTO: #END.
+  self LABEL: #END. self GOTO: #END.
   )
 )

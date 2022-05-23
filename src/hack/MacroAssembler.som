@@ -17,4 +17,16 @@ MacroAssembler = Assembler (
     self M: 'D'
   )
 
+  FOR: i FROM: start TO: end do: block = (
+    self LET: i EQ: start.
+
+
+  )
+
+  "
+   FOR: 'i' FROM: 1 TO: 10 do: [
+
+   ]
+
+  "
 )
