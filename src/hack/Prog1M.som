@@ -17,15 +17,12 @@ Prog1M = MacroAssembler (
     self D: 'M'.
     self @ 'sum'.
     self M: 'D+M'.
-    self @ 'i'. "i++"
+    self @ 'i'.             "i++"
     self M: 'M+1'.
     self GOTO: #LOOP.
 
   self LABEL: #WRITE.
-    self @ 'sum'.
-    self D: 'M'.
-    self @ 'R1'.
-    self M: 'D'.            "RAM[1] = the sum"
+    self MOV: 'sum' TO: 'R1'.
 
   self LABEL: #END.
     self GOTO: #END.

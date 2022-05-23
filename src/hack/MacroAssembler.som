@@ -9,4 +9,12 @@ MacroAssembler = Assembler (
     self @ sym.
     self M: val
   )
+
+  MOV: src TO: dst = (
+    self @ src.
+    self D: 'M'.
+    self @ dst.
+    self M: 'D'
+  )
+
 )

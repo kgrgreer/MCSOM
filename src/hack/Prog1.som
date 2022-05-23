@@ -19,7 +19,7 @@ Prog1 = Assembler (
     self D: 'M'.
     self @ 'sum'.
     self M: 'D+M'.
-    self @ 'i'. "i++"
+    self @ 'i'.             "i++"
     self M: 'M+1'.
     self @ #LOOP.
     self jump: JMP.         "GOTO LOOP"
