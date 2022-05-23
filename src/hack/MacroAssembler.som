@@ -5,4 +5,8 @@ MacroAssembler = Assembler (
     self jump: JMP.
   )
 
+  LET: sym EQ: val = (
+    self @ sym.
+    self M: val
+  )
 )
