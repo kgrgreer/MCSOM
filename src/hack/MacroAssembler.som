@@ -6,8 +6,12 @@ MacroAssembler = Assembler (
   )
 
   LET: sym EQ: val = (
+    " TODO: handle special cases for 0, 1, or -1 "
+    'LET ' print. sym print. ' = ' print. val println.
+    self @ val.
+    self D: 'M'.
     self @ sym.
-    self M: val
+    self M: 'D'
   )
 
   MOV: src TO: dst = (
@@ -17,10 +21,26 @@ MacroAssembler = Assembler (
     self M: 'D'
   )
 
-  FOR: i FROM: start TO: end do: block = (
+  FOR: i FROM: start TO: end DO: block = (
     self LET: i EQ: start.
+    self LABEL: 'FOR'.
 
+      " if i > end goto ENDFOR "
+      " self @ 'i'."
+      self D: 'M'.
+      self @ end.
+      self D: 'D-M'.
+      self @ 'ENDFOR'.
+      self D: '0' jump: JGT.
 
+      block value.
+
+      "i++"
+      self @ i.
+      self M: 'M+1'.
+
+    self GOTO: 'FOR'.
+    self LABEL: 'ENDFOR'.
   )
 
   "

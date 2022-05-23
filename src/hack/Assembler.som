@@ -42,7 +42,10 @@ Assembler = (
     self emit: (Vector new) , '0' , arg
   )
 
-  emit: a = ( output append: a. pc := pc + 1 )
+  emit: a = (
+    'emit: ' print. a println.
+    output append: a. pc := pc + 1
+  )
 
   emit: op comp: comp jump: jump = (
     self emit: (Vector new) , '111' , op , (ops at: comp) , jump
