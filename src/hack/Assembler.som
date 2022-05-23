@@ -39,32 +39,30 @@ Assembler = (
       sym value = nil ifTrue: [ sym value: pc ].
       arg := sym
     ].
-    self emitA: arg
+    self emit: (Vector new) , '0' , arg
   )
 
   emit: a = ( output append: a. pc := pc + 1 )
 
-  emitA: arg = ( self emit: (Vector new) , '0' , arg )
-
-  emitC: op comp: comp jump: jump = (
+  emit: op comp: comp jump: jump = (
     self emit: (Vector new) , '111' , op , (ops at: comp) , jump
   )
 
-  NULL: comp jump: jmp  = ( self emitC: '000' comp: comp jump: jmp )
+  NULL: comp jump: jmp  = ( self emit: '000' comp: comp jump: jmp )
   NULL: comp            = ( self NULL: comp jump: NULL )
-  M: comp jump: jmp     = ( self emitC: '001' comp: comp jump: jmp )
+  M: comp jump: jmp     = ( self emit: '001' comp: comp jump: jmp )
   M: comp               = ( self M: comp jump: NULL )
-  D: comp jump: jmp     = ( self emitC: '010' comp: comp jump: jmp )
+  D: comp jump: jmp     = ( self emit: '010' comp: comp jump: jmp )
   D: comp               = ( self D: comp jump: NULL )
-  MD: comp jump: jmp    = ( self emitC: '011' comp: comp jump: jmp )
+  MD: comp jump: jmp    = ( self emit: '011' comp: comp jump: jmp )
   MD: comp              = ( self MD: comp jump: NULL )
-  A: comp jump: jmp     = ( self emitC: '100' comp: comp jump: jmp )
+  A: comp jump: jmp     = ( self emit: '100' comp: comp jump: jmp )
   A: comp               = ( self A: comp jump: NULL )
-  AM: comp jump: jmp    = ( self emitC: '101' comp: comp jump: jmp )
+  AM: comp jump: jmp    = ( self emit: '101' comp: comp jump: jmp )
   AM: comp              = ( self AM: comp jump: NULL )
-  AD: comp jump: jmp    = ( self emitC: '110' comp: comp jump: jmp )
+  AD: comp jump: jmp    = ( self emit: '110' comp: comp jump: jmp )
   AD: comp              = ( self AM: comp jump: NULL )
-  AMD: comp jump: jmp   = ( self emitC: '111' comp: comp jump: jmp )
+  AMD: comp jump: jmp   = ( self emit: '111' comp: comp jump: jmp )
   AMD: comp             = ( self AMD: comp jump: NULL )
 
   jump: jmp             = ( self NULL: '0' jump: jmp )
