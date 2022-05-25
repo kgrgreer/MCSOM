@@ -22,7 +22,7 @@ Ex. a[1] -> a at: 1  and a[1]: 42 -> a at: 1 set: 42
 3. Replace | x y z | local variable declaration with something like 'let' or 'var'
 so you can initialize when declaring.
 
-4. Add Smalltalk '.' syntax, which would make constructors easier to write.
+4. Add Smalltalk ';' syntax, which would make constructors easier to write.
 
 5. Standardize assignment syntax: ie. fn = ( ... ) vs var := ( ... ).
 Make always just use ':'.
@@ -36,8 +36,16 @@ ever having to escape the terminator. Simpler syntax than perl would be XML-ish:
   </string>, not an issue because it didn't have the same opt-delim
 </string opt-delim>
 
+<<<<
 
-Later Versionss:
+
+
+>>>>
+<<foo<<
+
+>>foo>>
+
+Later Versions:
 
 8. Add 'char' support.
 
@@ -55,6 +63,56 @@ which could then be used for 'self'.
 14. Some way to capture a block's AST for interpretation as an mlang rather than
 directly execute.
 
+Turns out it is super simple to implement mlangs in Smalltalk since <,>,=,&&,||,! etc are all just methods. So you just define them on PropertyInfo.
+So:
+   User FIRST_NAME = "KEVIN"
+Would return an EQ object. And, since blocks are just objects with a .call() method you can have EQ implement CALL, so your DAO can't tell the difference between mlangs and native blocks, unless it wants to for indexing purposes.
+So:
+   dao where: [ :u | u firstName = 'Kevin' ] vs.
+   dao where: User FIRST_NAME = 'Kevin'.
+
+The mlang is actually shorter than a block and reads like native.
+
 15. Concurrency.
 
 16. Replace global variables with packages and requires:.
+
+17. Add a method to allow objects to participate in GC.
+Weak objects could remove themselves, trees could rebalance, hashmaps could resize,
+caches could purge old/unused objects, compound strings could concatenate into simple strings, etc.
+
+18. Add DAO's.
+
+Syntax?
+
+Class: 'Foo' do: [
+  Property: 'firstName' do: [
+
+  ].
+  StringProperty: 'lastName' do: [
+
+  ].
+]
+
+Class: 'Foo' {
+  Property: 'firstName' {
+
+  }.
+  StringProperty: 'lastName' {
+
+  }.
+}
+
+Class: 'Foo' {
+  Property: 'firstName' {
+
+  }.
+  StringProperty: 'lastName' {
+
+  }
+}
+
+
+Implementation Notes:
+https://www.tutorialspoint.com/c_standard_library/c_function_longjmp.htm
+https://tratt.net/laurie/essays/entries/timing_setjmp_and_the_joy_of_standards.html
