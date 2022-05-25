@@ -72,11 +72,11 @@ Assembler = (
 
   init = (
     output := Vector new.
-    pc := 16.
+    pc := 0.
 
     syms := Dictionary new.
-    syms at: 'SCREEN' put: '16384'.
-    syms at: 'KBD'    put: '24576'.
+    syms at: 'SCREEN' put: '16384'. "0x4000"
+    syms at: 'KBD'    put: '24576'. "0x6000"
     syms at: 'SP'     put: '0'.
     syms at: 'LCL'    put: '1'.
     syms at: 'ARG'    put: '2'.
