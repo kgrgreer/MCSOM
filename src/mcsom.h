@@ -6,6 +6,8 @@
 #include <string.h>
 
 #define LOOKUP(o, m)                ((Class) ((o)->class))(m)
+
+// TODO: https://stackoverflow.com/questions/11761703/overloading-macro-on-number-of-arguments
 #define CALL(o, m)                  (LOOKUP(o, m))((SObject) (o))
 #define CALL1(o, m, a1)             (((Method1) LOOKUP(o, m)))((SObject) (o), (SObject) (a1))
 #define CALL2(o, m, a1, a2)         (((Method2) LOOKUP(o, m)))((SObject) (o), (SObject) (a1), (SObject) (a2))
