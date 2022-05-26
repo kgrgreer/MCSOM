@@ -6,7 +6,8 @@
 #define NAME      3
 #define AS_STRING 4
 #define LENGTH    5
-#define IF_TRUE   6
+#define VALUE     6
+#define IF_TRUE   7
 
 
 typedef struct String_   *String;
@@ -18,11 +19,11 @@ String   newString(char*);
 SInteger newSInteger(int);
 STrue    newTrue();
 
+
 // Start STrue Definition
 
 typedef struct STrue_ {
   Class *class;
-  int   value;
 } *STrue;
 
 SObject STrue_name(SObject this) {
@@ -41,16 +42,22 @@ SObject STrue_asString(SObject this) {
  /*  return TRUE_STRING; */
 }
 
+SObject STrue_ifTrue(SObject this, SObject block) {
+  CALL(block, VALUE);
+  return this;
+}
+
 Method STrueClass(MethodId method) {
   switch ( method ) {
     case NAME:      return STrue_name ;
     case PRINTLN:   return STrue_println ;
     case AS_STRING: return STrue_asString ;
+    case IF_TRUE:   return (Method) STrue_ifTrue ;
   }
   return no_such_method;
 }
 
-STrue newSTrue() {
+STrue newTrue() {
   STrue obj = malloc(sizeof(struct STrue_));
   obj->class = (Class *) STrueClass;
   return obj;
@@ -172,6 +179,8 @@ int main(void) {
   SInteger i7   = newSInteger(7);
   String   str  = newString("Kevin");
   String   str2 = newString("Greer");
+  STrue    true = newTrue();
+
 
   LOOKUP(i5, NAME);
   CALL(i5, NAME);
@@ -185,5 +194,8 @@ int main(void) {
   CALL(CALL(name, NAME), PRINTLN);
   CALL(name, PRINTLN);
   CALL(CALL1(name, PLUS, i5), PRINTLN);
+
+  CALL(true, PRINTLN);
+
   printf("done.\n");
 }
