@@ -6,12 +6,57 @@
 #define NAME      3
 #define AS_STRING 4
 #define LENGTH    5
+#define IF_TRUE   6
+
 
 typedef struct String_   *String;
 typedef struct SInteger_ *SInteger;
+typedef struct STrue_    *STrue;
+typedef struct SFalse_   *SFalse;
 
-String newString(char*);
+String   newString(char*);
 SInteger newSInteger(int);
+STrue    newTrue();
+
+// Start STrue Definition
+
+typedef struct STrue_ {
+  Class *class;
+  int   value;
+} *STrue;
+
+SObject STrue_name(SObject this) {
+  return (SObject) newString("STrue");
+}
+
+SObject STrue_println(SObject this) {
+  printf("TRUE\n");
+  return this;
+}
+
+/* SObject TRUE_STRING = (SObject) newString("TRUE"); */
+
+SObject STrue_asString(SObject this) {
+  return (SObject) newString("TRUE");
+ /*  return TRUE_STRING; */
+}
+
+Method STrueClass(MethodId method) {
+  switch ( method ) {
+    case NAME:      return STrue_name ;
+    case PRINTLN:   return STrue_println ;
+    case AS_STRING: return STrue_asString ;
+  }
+  return no_such_method;
+}
+
+STrue newSTrue() {
+  STrue obj = malloc(sizeof(struct STrue_));
+  obj->class = (Class *) STrueClass;
+  return obj;
+}
+
+// End STrue Definition
 
 
 // Start SInteger Definition
