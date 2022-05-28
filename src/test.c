@@ -14,10 +14,68 @@ typedef struct String_   *String;
 typedef struct SInteger_ *SInteger;
 typedef struct STrue_    *STrue;
 typedef struct SFalse_   *SFalse;
+typedef struct SBlock_   *SBlock;
+
 
 String   newString(char*);
 SInteger newSInteger(int);
 STrue    newTrue();
+SBlock   newSBlock();
+
+jmp_buf env;
+jmp_buf ret;
+
+
+
+// Start SBlock Definition
+
+typedef struct SBlock_ {
+  Class   *class;
+  jmp_buf env;
+  jmp_buf ret;
+  int     count;
+} *SBlock;
+
+SObject SBlock_name(SObject this) {
+  return (SObject) newString("SBlock");
+}
+
+SObject SBlock_println(SObject this) {
+  printf("BLOCK\n");
+  return this;
+}
+
+/* SObject TRUE_STRING = (SObject) newString("TRUE"); */
+
+SObject SBlock_asString(SObject this) {
+  return (SObject) newString("BLOCK");
+ /*  return TRUE_STRING; */
+}
+
+SObject SBlock_value(SObject this) {
+  // Call Block code
+  _longjmp(env, 1);
+  return this;
+}
+
+Method SBlockClass(MethodId method) {
+  switch ( method ) {
+    case NAME:      return SBlock_name ;
+    case PRINTLN:   return SBlock_println ;
+    case AS_STRING: return SBlock_asString ;
+    case VALUE:     return SBlock_value;
+  }
+  return no_such_method;
+}
+
+SBlock newSBlock() {
+  SBlock obj = malloc(sizeof(struct SBlock_));
+  obj->class = (Class *) SBlockClass;
+  obj->count = 0;
+  return obj;
+}
+
+// End SBlock Definition
 
 
 // Start STrue Definition
@@ -43,7 +101,18 @@ SObject STrue_asString(SObject this) {
 }
 
 SObject STrue_ifTrue(SObject this, SObject block) {
+  register jmp_buf ret2;
+  memcpy(ret, ret2, sizeof(jmp_buf));
+  printf("IFTRUE 1\n");
+  if ( ! _setjmp(ret) )
   CALL(block, VALUE);
+  printf("IFTRUE 2\n");
+  // memcpy(ret2, ret, sizeof(jmp_buf));
+  if ( ! _setjmp(ret) ) {
+    CALL(block, VALUE);
+  } else {
+    _longjmp(ret2, 1);
+  }
   return this;
 }
 
@@ -175,13 +244,13 @@ String newString(char* str) {
 // End String Definition
 
 int main(void) {
-  SInteger i5   = newSInteger(5);
-  SInteger i7   = newSInteger(7);
-  String   str  = newString("Kevin");
-  String   str2 = newString("Greer");
-  STrue    true = newTrue();
-
-
+  SInteger i5     = newSInteger(5);
+  SInteger i7     = newSInteger(7);
+  String   str    = newString("Kevin");
+  String   str2   = newString("Greer");
+  STrue    true   = newTrue();
+  volatile SBlock   block1 = newSBlock();
+/*
   LOOKUP(i5, NAME);
   CALL(i5, NAME);
 
@@ -196,6 +265,38 @@ int main(void) {
   CALL(CALL1(name, PLUS, i5), PRINTLN);
 
   CALL(true, PRINTLN);
+*/
+volatile int val = _setjmp(env);
+printf("****** SETJMP ENV %d\n", val);
+  if ( val && block1->count == 0 ) {
+    printf("BLOCK1 EXECUTED\n");
+    longjmp(ret, 1);
+    printf("*******************UNEXPECTED\n");
+  }
+
+  printf("ABOUT TO CALL--------------------------------------1\n");
+ if ( ! _setjmp(ret) )
+SBlock_value((SObject) block1);
+//  CALL(block1, VALUE);
+
+  printf("ABOUT TO CALL--------------------------------------2\n");
+  if ( ! _setjmp(ret) )
+  CALL(block1, VALUE);
+
+  if ( ! _setjmp(ret) )
+  CALL1(true, IF_TRUE, block1);
+
+/*
+  printf("ABOUT TO CALL--------------------------------------3\n");
+  CALL(block1, VALUE);
+  */
+ //CALL(block1, VALUE);
+
+  /*
+  printf("POST BLOCK1\n");
+  CALL1(true, IF_TRUE, block1);
+  CALL1(true, IF_TRUE, block1);
+  */
 
   printf("done.\n");
 }

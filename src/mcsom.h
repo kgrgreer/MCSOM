@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <setjmp.h>
 
 #define LOOKUP(o, m)                ((Class) ((o)->class))(m)
 
