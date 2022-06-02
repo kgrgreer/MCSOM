@@ -1,13 +1,14 @@
 #include "mcsom.h"
 
-#define NEW       0
-#define PLUS      1
-#define PRINTLN   2
-#define NAME      3
-#define AS_STRING 4
-#define LENGTH    5
-#define VALUE     6
-#define IF_TRUE   7
+#define NEW          0
+#define PLUS         1
+#define PRINTLN      2
+#define NAME         3
+#define AS_STRING    4
+#define LENGTH       5
+#define VALUE        6
+#define IF_TRUE      7
+#define TIMES_REPEAT 8
 
 
 typedef struct String_   *String;
@@ -50,7 +51,7 @@ SObject SBlock_asString(SObject this) {
 
 SObject SBlock_value(SObject this) {
   // Call Block code
-  _longjmp(((SBlock) this)->ret, 1);
+  _longjmp(((SBlock) this)->env, 1);
   return this;
 }
 
@@ -97,18 +98,18 @@ SObject STrue_asString(SObject this) {
 }
 
 SObject STrue_ifTrue(SObject this, SObject block) {
-  register jmp_buf ret2;
-  memcpy(((SBlock) block)->ret, ret2, sizeof(jmp_buf));
+//  register jmp_buf ret2;
+//  memcpy(((SBlock) block)->ret, ret2, sizeof(jmp_buf));
   printf("IFTRUE 1\n");
   if ( ! _setjmp(((SBlock) block)->ret) )
-  CALL(block, VALUE);
-  printf("IFTRUE 2\n");
-  // memcpy(ret2, ret, sizeof(jmp_buf));
-  if ( ! _setjmp(((SBlock) block)->ret) ) {
     CALL(block, VALUE);
-  } else {
-    _longjmp(ret2, 1);
-  }
+  //printf("IFTRUE 2\n");
+  // memcpy(ret2, ret, sizeof(jmp_buf));
+  //if ( ! _setjmp(((SBlock) block)->ret) ) {
+  //  CALL(block, VALUE);
+  //} else {
+  //  _longjmp(ret2, 1);
+ // }
   return this;
 }
 
@@ -158,15 +159,24 @@ SObject SInteger_asString(SObject this) {
   return (SObject) newString(str);
 }
 
+SObject SInteger_timesRepeat(SObject this, SObject block) {
+  for ( int i = ((SInteger) this)->value ; i >=0 ; i-- )
+    CALL(block, VALUE);
+  return this;
+}
+
 Method SIntegerClass(MethodId method) {
   switch ( method ) {
-    case NAME:      return SInteger_name ;
-    case PLUS:      return (Method) SInteger_plus ;
-    case PRINTLN:   return SInteger_println ;
-    case AS_STRING: return SInteger_asString ;
+    case NAME:         return SInteger_name ;
+    case PLUS:         return (Method) SInteger_plus ;
+    case PRINTLN:      return SInteger_println ;
+    case AS_STRING:    return SInteger_asString ;
+    case TIMES_REPEAT: return (Method) SInteger_timesRepeat;
   }
   return no_such_method;
 }
+
+// timesRepeat: block
 
 SInteger newSInteger(int i) {
   SInteger obj = malloc(sizeof(struct SInteger_));
@@ -282,6 +292,8 @@ SBlock_value((SObject) block);
   if ( ! _setjmp(block->ret) )
   CALL1(true, IF_TRUE, block);
 
+  if ( ! _setjmp(block->ret) )
+  CALL1(i5, TIMES_REPEAT, block);
 /*
   printf("ABOUT TO CALL--------------------------------------3\n");
   CALL(block1, VALUE);
