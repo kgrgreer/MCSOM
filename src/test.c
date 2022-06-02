@@ -22,10 +22,6 @@ SInteger newSInteger(int);
 STrue    newTrue();
 SBlock   newSBlock();
 
-jmp_buf env;
-jmp_buf ret;
-
-
 
 // Start SBlock Definition
 
@@ -54,7 +50,7 @@ SObject SBlock_asString(SObject this) {
 
 SObject SBlock_value(SObject this) {
   // Call Block code
-  _longjmp(env, 1);
+  _longjmp(((SBlock) this)->ret, 1);
   return this;
 }
 
@@ -102,13 +98,13 @@ SObject STrue_asString(SObject this) {
 
 SObject STrue_ifTrue(SObject this, SObject block) {
   register jmp_buf ret2;
-  memcpy(ret, ret2, sizeof(jmp_buf));
+  memcpy(((SBlock) block)->ret, ret2, sizeof(jmp_buf));
   printf("IFTRUE 1\n");
-  if ( ! _setjmp(ret) )
+  if ( ! _setjmp(((SBlock) block)->ret) )
   CALL(block, VALUE);
   printf("IFTRUE 2\n");
   // memcpy(ret2, ret, sizeof(jmp_buf));
-  if ( ! _setjmp(ret) ) {
+  if ( ! _setjmp(((SBlock) block)->ret) ) {
     CALL(block, VALUE);
   } else {
     _longjmp(ret2, 1);
@@ -249,7 +245,7 @@ int main(void) {
   String   str    = newString("Kevin");
   String   str2   = newString("Greer");
   STrue    true   = newTrue();
-  volatile SBlock   block1 = newSBlock();
+  volatile SBlock   block = newSBlock();
 /*
   LOOKUP(i5, NAME);
   CALL(i5, NAME);
@@ -266,25 +262,25 @@ int main(void) {
 
   CALL(true, PRINTLN);
 */
-volatile int val = _setjmp(env);
+volatile int val = _setjmp(block->env);
 printf("****** SETJMP ENV %d\n", val);
-  if ( val && block1->count == 0 ) {
+  if ( val && block->count == 0 ) {
     printf("BLOCK1 EXECUTED\n");
-    longjmp(ret, 1);
+    longjmp(block->ret, 1);
     printf("*******************UNEXPECTED\n");
   }
 
   printf("ABOUT TO CALL--------------------------------------1\n");
- if ( ! _setjmp(ret) )
-SBlock_value((SObject) block1);
+ if ( ! _setjmp(block->ret) )
+SBlock_value((SObject) block);
 //  CALL(block1, VALUE);
 
   printf("ABOUT TO CALL--------------------------------------2\n");
-  if ( ! _setjmp(ret) )
-  CALL(block1, VALUE);
+  if ( ! _setjmp(block->ret) )
+  CALL(block, VALUE);
 
-  if ( ! _setjmp(ret) )
-  CALL1(true, IF_TRUE, block1);
+  if ( ! _setjmp(block->ret) )
+  CALL1(true, IF_TRUE, block);
 
 /*
   printf("ABOUT TO CALL--------------------------------------3\n");
