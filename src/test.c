@@ -30,7 +30,7 @@ typedef struct SBlock_ {
   Class   *class;
   jmp_buf env;
   jmp_buf ret;
-  int     count;
+  int     state;
 } *SBlock;
 
 SObject SBlock_name(SObject this) {
@@ -51,7 +51,8 @@ SObject SBlock_asString(SObject this) {
 
 SObject SBlock_value(SObject this) {
   // Call Block code
-  _longjmp(((SBlock) this)->env, 1);
+//  if ( ! _setjmp(((SBlock) this)->ret) )
+    _longjmp(((SBlock) this)->env, 1);
   return this;
 }
 
@@ -68,7 +69,7 @@ Method SBlockClass(MethodId method) {
 SBlock newSBlock() {
   SBlock obj = malloc(sizeof(struct SBlock_));
   obj->class = (Class *) SBlockClass;
-  obj->count = 0;
+  obj->state = 0;
   return obj;
 }
 
@@ -101,7 +102,7 @@ SObject STrue_ifTrue(SObject this, SObject block) {
 //  register jmp_buf ret2;
 //  memcpy(((SBlock) block)->ret, ret2, sizeof(jmp_buf));
   printf("IFTRUE 1\n");
-  if ( ! _setjmp(((SBlock) block)->ret) )
+//  if ( ! _setjmp(((SBlock) block)->ret) )
     CALL(block, VALUE);
   //printf("IFTRUE 2\n");
   // memcpy(ret2, ret, sizeof(jmp_buf));
@@ -160,8 +161,12 @@ SObject SInteger_asString(SObject this) {
 }
 
 SObject SInteger_timesRepeat(SObject this, SObject block) {
-  for ( int i = ((SInteger) this)->value ; i >=0 ; i-- )
+  SBlock b = (SBlock) block;
+//  for ( b->state = 0 ; b->state < ((SInteger) this)->value ; b->state++ ) {
+  for ( int i = ((SInteger) this)->value ; i > 0 ; i-- ) {
+    //if ( ! _setjmp(((SBlock) block)->ret) )
     CALL(block, VALUE);
+  }
   return this;
 }
 
@@ -274,7 +279,7 @@ int main(void) {
 */
 volatile int val = _setjmp(block->env);
 printf("****** SETJMP ENV %d\n", val);
-  if ( val && block->count == 0 ) {
+  if ( val ) {
     printf("BLOCK1 EXECUTED\n");
     longjmp(block->ret, 1);
     printf("*******************UNEXPECTED\n");
@@ -289,10 +294,17 @@ SBlock_value((SObject) block);
   if ( ! _setjmp(block->ret) )
   CALL(block, VALUE);
 
+  printf("ABOUT TO CALL--------------------------------------3\n");
   if ( ! _setjmp(block->ret) )
   CALL1(true, IF_TRUE, block);
 
+  printf("ABOUT TO CALL--------------------------------------4\n");
   if ( ! _setjmp(block->ret) )
+  CALL1(true, IF_TRUE, block);
+
+
+  printf("ABOUT TO CALL--------------------------------------5\n");
+   if ( ! _setjmp(block->ret) )
   CALL1(i5, TIMES_REPEAT, block);
 /*
   printf("ABOUT TO CALL--------------------------------------3\n");
