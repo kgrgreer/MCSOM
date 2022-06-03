@@ -7,7 +7,7 @@ Assembler = (
     ops
 
     " Symbol Table "
-    syms
+    st
 
     " A Vector of Emitted Machine Code "
     output
@@ -24,13 +24,13 @@ Assembler = (
   )
 
   sym: s = (
-    (syms containsKey: s) ifFalse: [
-      syms at: s put: nil
+    (st containsKey: s) ifFalse: [
+      st at: s put: nil
     ].
-    ^ syms pairAt: s
+    ^ st pairAt: s
   )
 
-  LABEL: sym = ( syms at: sym put: pc )
+  LABEL: sym = ( st at: sym put: pc )
 
   @ arg = (
     (arg class) = Integer ifFalse: [
@@ -74,17 +74,17 @@ Assembler = (
     output := Vector new.
     pc := 0.
 
-    syms := Dictionary new.
-    syms at: 'SCREEN' put: '16384'. "0x4000"
-    syms at: 'KBD'    put: '24576'. "0x6000"
-    syms at: 'SP'     put: '0'.
-    syms at: 'LCL'    put: '1'.
-    syms at: 'ARG'    put: '2'.
-    syms at: 'THIS'   put: '3'.
-    syms at: 'THAT'   put: '4'.
+    st := Dictionary new.
+    st at: 'SCREEN' put: '16384'. "0x4000"
+    st at: 'KBD'    put: '24576'. "0x6000"
+    st at: 'SP'     put: '0'.
+    st at: 'LCL'    put: '1'.
+    st at: 'ARG'    put: '2'.
+    st at: 'THIS'   put: '3'.
+    st at: 'THAT'   put: '4'.
 
     "R0..R15 = 0..15"
-    0 to: 15 do: [ :i | syms at: ( 'R' + i ) put: i ].
+    0 to: 15 do: [ :i | st at: ( 'R' + i ) put: i ].
 
     ops := Dictionary new.
     ops at: '0'   put: '0101010'.
