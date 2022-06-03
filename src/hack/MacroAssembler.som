@@ -1,5 +1,13 @@
 MacroAssembler = Assembler (
 
+  "
+    TODO:
+      - IF
+      - WHILE
+      - FUNCTION / CALL
+      - METHOD / CALL
+  "
+
   GOTO: sym = (
     self @ sym.
     self jump: JMP.
